@@ -16,7 +16,6 @@
 + StudentenAdmin()
 - getStudent(String naam): Student
 - getProgramma(String naam): Programma
-+ getStudentKlassenNaam(String naam): String
 + voegProgrammaToe(Programma programma): boolean
 + voegStudentToe(Student student): boolean
 + verhoogBehaaldeProgrammaOnderdelen(String naam, double behaald)

@@ -31,18 +31,27 @@ public class StudentenAdmin {
      * @param naam Naam van de student.
      *
      * @return De eerste, op naam matchende student of null.
+     *
+     * @throws StudentenAdminException Wordt gegooid als naam null is of er geen student met de gespecificeerde
+     * naam gevonden is.
      */
-    private Student getStudent(String naam){
-
+    private Student getStudent(String naam) throws StudentenAdminException{
+/*
+        if (naam == null){
+            throw new StudentenAdminException("Het veld naam mag niet null zijn");
+        }
+*/
         for (Student student : studenten){
 
             if(student.getNaam().equals(naam)){
 
                 return student;
+
             }
         }
 
         return null;
+
     }
 
     /**
@@ -50,10 +59,17 @@ public class StudentenAdmin {
      *
      * @param naam De naam van het programma.
      *
-     * @return Een gegeven studieprogramma.
+     * @return Een gegeven studieprogramma of null.
+     *
+     * @throws StudentenAdminException Wordt gegooid als naam null is of er geen programma met de gespecificeerde
+     * naam gevonden is.
      */
-    private Programma getProgramma(String naam){
-
+    private Programma getProgramma(String naam) throws StudentenAdminException{
+/*
+        if (naam == null){
+            throw new StudentenAdminException("De naam van het programma is niet bekend");
+        }
+*/
         for (Programma programma : programmas){
 
             if (programma.getNaam().equals(naam)){
@@ -69,32 +85,45 @@ public class StudentenAdmin {
 
 
     /**
-     * Voegt een nieuw programma toe aan de lijst van programmas.
+     * Voegt een nieuwe opleiding toe aan de lijst van programmas.
      *
-     * @param programmaKlasse De klasse van het nieuwe programma.
+     * @param naam De nieuwe opleiding.
+     *
+     * @param studiepunten Het aantal studiepunten.
+     *
+     * @throws StudentenAdminException Als programma met dezelfde naam al bestaat of toevoegen van programma misgaat.
+     */
+    public void voegOpleidingToe(String naam, double studiepunten) throws StudentenAdminException{
+
+        if (getProgramma(naam) != null){
+
+            throw new StudentenAdminException("Programma met deze naam bestaat al.");
+
+        }
+
+        programmas.add(new Opleiding(naam, studiepunten));
+
+    }
+
+    /**
+     * Voegt een nieuwe CPP toe aan de lijst van programmas.
      *
      * @param naam Het nieuwe programma.
      *
-     * @param hoevelheid Het nieuwe programma.
+     * @param modules Het aantal studiepunten.
      *
-     * @return De status van de operatie.
+     * @throws StudentenAdminException Als programma met dezelfde naam al bestaat of toevoegen van programma misgaat.
      */
-    public boolean voegProgrammaToe(String programmaKlasse, String naam, double hoevelheid) throws StudentenAdminException{
+    public void voegCppToe(String naam, int modules) throws StudentenAdminException{
 
-        try{
+        if (getProgramma(naam) != null){
 
-            Constructor klasse = Class.forName(programmaKlasse).getConstructor(String.class, Double.TYPE);
-            Programma programma = (Programma)klasse.newInstance(naam, hoevelheid);
-            programmas.add(programma);
+            throw new StudentenAdminException("Programma met deze naam bestaat al.");
 
-
-        } catch (Exception ex){
-
-            throw new StudentenAdminException("Toevoegen van programma niet mogelijk (" + ex.getClass().getName() + ")");
         }
 
+        programmas.add(new Cpp(naam, modules));
 
-        return true;
     }
 
 
@@ -102,43 +131,65 @@ public class StudentenAdmin {
     /**
      * Voegt een student toe aan de lijst van studenten.
      *
-     * @param studentKlasse De klasse van het nieuwe programma.
-     *
      * @param studentNaam De naam van een nieuwe student.
      *
-     * @param programmaNaam De naam van de opleiding.
+     * @param opleidingNaam De naam van de opleiding.
      *
-     * @return Succes van de operatie.
+     * @throws StudentenAdminException Als studentnaam geregistreerd is of een programma met de naam niet bestaat.
      */
-    public boolean voegStudentToe(String studentKlasse, String studentNaam, String programmaNaam) throws StudentenAdminException{
+    public void voegRegulierToe(String studentNaam, String opleidingNaam) throws StudentenAdminException{
 
         for (Student bestaandeStudent : studenten){
+
             if (bestaandeStudent.getNaam().equals(studentNaam)){
+
                 throw new StudentenAdminException("Student met dezelfde naam staat al geregistreerd");
             }
         }
 
-        if (studentNaam.length() < 2){
+        Programma programma = getProgramma(opleidingNaam);
 
-            throw new StudentenAdminException("De naam van een student moet minimaal 2 letters bevatten");
+        if (programma == null){
+
+            throw new StudentenAdminException("Programma met deze naam bestaat niet.");
+
         }
 
-        if (programmaNaam == null){
-            throw new StudentenAdminException("De naam van het programma is niet bekend");
+        studenten.add(new Regulier(studentNaam, programma));
+
+
+    }
+
+
+    /**
+     * Voegt een scholer toe aan de lijst van studenten.
+     *
+     * @param scholerNaam De naam van een nieuwe scholer.
+     *
+     * @param cppNaam De naam van de cpp.
+     *
+     * @throws StudentenAdminException Als student met de naam al geregistreerd is of een programma met de naam niet bestaat.
+     */
+    public void voegScholerToe(String scholerNaam, String cppNaam) throws StudentenAdminException{
+
+        for (Student bestaandescholer : studenten){
+
+            if (bestaandescholer.getNaam().equals(scholerNaam)){
+
+                throw new StudentenAdminException("Student met dezelfde naam staat al geregistreerd");
+            }
         }
 
-        try {
-            Constructor klasse = Class.forName(studentKlasse).getConstructor(String.class, Programma.class);
-            Programma programma = getProgramma(programmaNaam);
-            Student student = (Student)klasse.newInstance(studentNaam, programma);
-            studenten.add(student);
+        Programma programma = getProgramma(cppNaam);
 
-        } catch (Exception ex){
+        if (programma == null){
 
-            throw new StudentenAdminException("Toevoegen van student niet mogelijk. " + ex.getMessage());
+            throw new StudentenAdminException("Programma met deze naam bestaat niet.");
+
         }
 
-        return true;
+        studenten.add(new Scholer(scholerNaam, programma));
+
 
     }
 
@@ -146,33 +197,55 @@ public class StudentenAdmin {
 
 
     /**
-     * Verhoogt de hoeveelheid behaalde programmaonderdelen.
+     * Verhoogt het aantal studiepunten.
      *
      * @param naam Naam van de student.
      *
-     * @param hoeveelheid Hoeveelheid waarmee de student vordering geboekt heeft.
+     * @param studiepunten Aantal studiepunten die een student gehaald heeft.
      *
-     * @param klassenNaam naam van de klasse van een student
-     *
-     * @return Succes van de operatie.
+     * @throws StudentenAdminException Wordt gegooid als student onbekend is of niet regulier is.
      */
-    public boolean verhoogBehaaldeProgrammaOnderdelen(String naam, double hoeveelheid, String klassenNaam) throws StudentenAdminException{
+    public void verhoogAantalStudiepunten(String naam, double studiepunten) throws StudentenAdminException{
 
         Student student = getStudent(naam);
 
         if (student == null){
             throw new StudentenAdminException("Student naam is onbekend");
         }
-        if (hoeveelheid < 0.0){
-            throw new StudentenAdminException("Aantal behaalde onderdelen moet groter dan 0 zijn");
-        }
-        if (!student.getProgramma().getClass().getName().equals(klassenNaam)){
-            throw new StudentenAdminException("Alleen scholers hebben modules en reguliere studenten studiepunten");
+
+        if (!(student instanceof Regulier)){
+            throw new StudentenAdminException("Alleen reguliere studenten hebben studiepunten");
         }
 
-        return student.verhoogBehaaldProgrammaOnderdeel(hoeveelheid);
+        ((Regulier) student).verhoogBehaaldeStudiepunten(studiepunten);
 
     }
+
+    /**
+     * Verhoogt het aantal modules.
+     *
+     * @param naam Naam van de student.
+     *
+     * @param aantalModules Aantal modules die een student gehaald heeft.
+     *
+     * @throws StudentenAdminException Wordt gegooid als student onbekend is of geen scholer is.
+     */
+    public void verhoogAantalModules(String naam, double aantalModules) throws StudentenAdminException{
+
+        Student student = getStudent(naam);
+
+        if (student == null){
+            throw new StudentenAdminException("Student naam is onbekend");
+        }
+
+        if (!(student instanceof Scholer)){
+            throw new StudentenAdminException("Alleen scholers hebben modules");
+        }
+
+        ((Scholer) student).verhoogAantalModules(aantalModules);
+
+    }
+
 
 
 

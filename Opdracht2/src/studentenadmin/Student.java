@@ -13,14 +13,71 @@ public abstract class Student {
      * @param naam Naam van een student.
      *
      * @param programma Het programma waarvoor de student ingeschreven staat.
+     *
+     * @throws StudentenAdmin Wordt gegooid als naam van de student minder dan 2 letters bevat
      */
-    public Student(String naam, Programma programma){
+    public Student(String naam, Programma programma) throws StudentenAdminException{
 
-        this.naam = naam;
+        String opgeschoondeString = schoonStringOp(naam);
+        if (!stringIsMinimaalTweeLetters(opgeschoondeString)){
+
+            throw new StudentenAdminException("De naam van een student moet minimaal 2 letters bevatten");
+        }
+
+        this.naam = opgeschoondeString;
         this.programma = programma;
     }
 
+    /**
+     * Test of een string tenminste 2 letters lang is.
+     *
+     * @param string string die getoetst wordt.
+     *
+     * @return het resultaat van de test.
+     */
+    private boolean stringIsMinimaalTweeLetters(String string){
+        if (string == null){
+            return false;
+        }
+        char[] chars = string.toCharArray();
 
+        int teller = 0;
+        for (char c : chars){
+            if(Character.isAlphabetic(c)){
+
+                teller ++;
+            }
+        }
+
+        return (teller >= 2);
+
+    }
+    /**
+     * Verwijdert niet-alfabetische characters van een string.
+     *
+     * @param string string die opgeschoond wordt.
+     *
+     * @return de opgeschoonde String.
+     */
+    private String schoonStringOp(String string){
+        if (string == null){
+            return null;
+        }
+        char[] chars = string.toCharArray();
+        char[] goedeChars = new char[chars.length];
+
+        int teller = 0;
+        for (char c : chars){
+            if(Character.isAlphabetic(c)){
+
+                goedeChars[teller] = c;
+                teller ++;
+            }
+        }
+
+        return (String.valueOf(goedeChars));
+
+    }
     /**
      * Check van de status van het studie programma van een student.
      *
@@ -35,24 +92,6 @@ public abstract class Student {
      */
     public abstract String getStudentInfo() ;
 
-
-    /**
-     * Methode om bij te houden dat een student kwantitatief vordering heeft gemaakt op het bijbehorende studie programma.
-     *
-     * @param hoeveelheid Hoeveelheid die de student vordering heeft gemaakt.
-     *
-     *
-     * @return Succes van de operatie.
-     */
-    /*
-    De keuze voor deze abstract methode is op het eerste gezicht misschien verrassend, in het bijzonder als je je realiseert
-    dat de eenheid van scholers eigenlijk integers zijn. Maar ik heb bewust voor deze oplossing gekozen,
-    omdat ik ervan uitga dat ook nieuwe, nog niet geimplementeerde subklassen van Student met andere soorten programma's
-    ook kwantitatief studievoortgang kunnen boeken, die via een gui aanspreekbaar moeten zijn. Dmv deze abstracte methode
-    is er al een weg uitgestipt om dit op een uniforme manier te implementeren zonder iets in de rest van het programma
-    te hoeven veranderen. In de gui moet alleen de nieuwe subklasse opgenomen worden.
-     */
-    public abstract boolean verhoogBehaaldProgrammaOnderdeel(double hoeveelheid);
 
 
     public String getNaam() {

@@ -16,6 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class StudentAdminFrame extends JFrame {
 
@@ -77,11 +79,11 @@ public class StudentAdminFrame extends JFrame {
         studentenAdmin = new StudentenAdmin();
 
         try {
-            studentenAdmin.voegProgrammaToe("studentenadmin.Opleiding","Wiskunde", 160);
-            studentenAdmin.voegProgrammaToe("studentenadmin.Opleiding","Informatica", 120);
-            studentenAdmin.voegProgrammaToe("studentenadmin.Cpp", "CPP Softwarearchitect", 4);
-            studentenAdmin.voegProgrammaToe("studentenadmin.Cpp", "CPP Java", 6);
-            studentenAdmin.voegProgrammaToe("studentenadmin.Cpp", "CPP System Ontwikkelaar", 3);
+            studentenAdmin.voegOpleidingToe("Wiskunde", 160);
+            studentenAdmin.voegOpleidingToe("Informatica", 120);
+            studentenAdmin.voegCppToe("CPP Softwarearchitect", 4);
+            studentenAdmin.voegCppToe( "CPP Java", 6);
+            studentenAdmin.voegCppToe("CPP System Ontwikkelaar", 3);
 
         } catch (StudentenAdminException studaminEx) {
 
@@ -127,7 +129,7 @@ public class StudentAdminFrame extends JFrame {
 
             String opleidingNaam = opleidingComboBox.getSelectedItem().toString();
 
-            studentenAdmin.voegStudentToe("studentenadmin.Regulier", studentNaam, opleidingNaam);
+            studentenAdmin.voegRegulierToe(studentNaam, opleidingNaam);
 
             infoLabel.setText("Reguliere student met naam " + studentNaam + " is succesvol toegevoegd." );
 
@@ -135,7 +137,11 @@ public class StudentAdminFrame extends JFrame {
 
             infoLabel.setText(adminEx.getMessage());
 
-        } finally {
+        } catch (NullPointerException nullEx) {
+
+            infoLabel.setText("Opleiding veld is niet geselecteed");
+
+        } finally{
 
             studentTextField.setText("");
         }
@@ -153,7 +159,7 @@ public class StudentAdminFrame extends JFrame {
 
             String cppNaam = scholingComboBox.getSelectedItem().toString();
 
-            studentenAdmin.voegStudentToe("studentenadmin.Scholer", scholerNaam, cppNaam);
+            studentenAdmin.voegScholerToe(scholerNaam, cppNaam);
 
             infoLabel.setText("Scholer met naam " + scholerNaam + " is succesvol toegevoegd." );
 
@@ -203,7 +209,7 @@ public class StudentAdminFrame extends JFrame {
 
             double d1 = Double.parseDouble(puntenVeld.getText());
 
-            studentenAdmin.verhoogBehaaldeProgrammaOnderdelen(naam, d1, klassenNaam);
+            studentenAdmin.verhoogAantalStudiepunten(naam, d1);
 
             String info = studentenAdmin.getStudentInfo(naam);
 
@@ -229,7 +235,7 @@ public class StudentAdminFrame extends JFrame {
         String klassenNaam = "studentenadmin.Cpp";
 
         try {
-            studentenAdmin.verhoogBehaaldeProgrammaOnderdelen(naam, 1.0, klassenNaam);
+            studentenAdmin.verhoogAantalModules(naam, 1.0);
             String info = studentenAdmin.getStudentInfo(naam);
             studentInfoVeld.setText(info);
 
@@ -333,6 +339,12 @@ public class StudentAdminFrame extends JFrame {
             mijnTabbladenPanel.addTab("studentinfo", null, getStudentPanel(), null);
             mijnTabbladenPanel.addTab("alle studenten", null,
                     getAlleStudentenPanel(), null);
+            mijnTabbladenPanel.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    infoLabel.setText("");
+                }
+            });
         }
         return mijnTabbladenPanel;
     }
@@ -357,6 +369,7 @@ public class StudentAdminFrame extends JFrame {
             voegStudenttoePanel.add(studentLabel, null);
             voegStudenttoePanel.add(getStudentTextField(), null);
             voegStudenttoePanel.add(getStudentButton(), null);
+
         }
         return voegStudenttoePanel;
     }

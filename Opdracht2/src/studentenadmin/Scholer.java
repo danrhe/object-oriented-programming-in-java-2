@@ -14,6 +14,7 @@ public class Scholer extends Student{
      *
      * @param cpp Professional program.
      *
+     * @throws StudentenAdminException Wordt gegooid als programma geen instantie van de subklasse Cpp is
      */
     public Scholer (String naam, Programma cpp) throws StudentenAdminException{
         super(naam, cpp);
@@ -33,17 +34,19 @@ public class Scholer extends Student{
      *
      * @param behaaldeModules Het nieuwe aantal behaalde modules.
      *
-     * @return Success van de operatie.
+     * @throws StudentenAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP.
      */
-    public boolean verhoogBehaaldProgrammaOnderdeel(double behaaldeModules) {
+    public void verhoogAantalModules(double behaaldeModules) throws StudentenAdminException{
 
         Cpp cpp = (Cpp)getProgramma();
 
-        if(this.behaaldeModules + (int)behaaldeModules  <= cpp.getAantalModules()) {
-            this.behaaldeModules += (int) behaaldeModules;
-            return true;
+        if(this.behaaldeModules + (int)behaaldeModules  > cpp.getAantalModules()) {
+
+            throw new StudentenAdminException("Aantal behaalde modules is groter dan deze CPP heeft");
+
         }
-        return false;
+        this.behaaldeModules += (int) behaaldeModules;
+
     }
 
 

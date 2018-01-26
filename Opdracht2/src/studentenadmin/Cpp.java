@@ -10,16 +10,12 @@ public class Cpp extends Programma {
 
     /**
      * Default constructor.
-     *
-     * Opmerking: De cpp constructor moet met een formele parameter double aangeroepen worden, anders kan de StudentenAdmin
-     * klasse geen nieuw Cpp toevoegen. De methode voor het toevoegen van een nieuw programma genereert een constructor klasse
-     * en die verwacht voor elk nieuw programma een string parameter en een double parameter.
-     *
+     **
      * @param naam De naam van het professional program.
      *
      * @param aantalModules Het aantal modules die behaalt moeten worden om voor het programma te slagen.
      */
-    public Cpp(String naam, double aantalModules){
+    public Cpp(String naam, int aantalModules){
 
         super(naam);
         this.aantalModules = (int)aantalModules;
