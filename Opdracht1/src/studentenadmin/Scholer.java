@@ -5,19 +5,19 @@ package studentenadmin;
  */
 public class Scholer extends Student{
 
-    private Cpp cpp = null;
     private int behaaldeModules = 0;
 
     /**
      * Default constructor.
      *
-     * @param naam naam van de student.
-     * @param cpp professional program
+     * @param naam Naam van de student.
+     *
+     * @param cpp Professional program.
      *
      */
     public Scholer (String naam, Cpp cpp){
-        super(naam);
-        this.cpp = cpp;
+
+        super(naam, cpp);
     }
 
     public int getBehaaldeModules() {
@@ -25,23 +25,59 @@ public class Scholer extends Student{
         return behaaldeModules;
     }
 
+    /**
+     * Past het aantal behaalde modules van de scholer aan mits dit getal niet groter is dan het aantal modules van het
+     * cpp programma.
+     *
+     * @param behaaldeModules Het nieuwe aantal behaalde modules.
+     *
+     * @return Success van de operatie.
+     */
+    public boolean verhoogBehaaldProgrammaOnderdeel(double behaaldeModules) {
 
-    public void setBehaaldeModules(int behaaldeModules) {
-        if(behaaldeModules <= cpp.getAantalModules()) {
-            this.behaaldeModules = behaaldeModules;
+        Cpp cpp = (Cpp)getProgramma();
+
+        if(this.behaaldeModules + (int)behaaldeModules  <= cpp.getAantalModules()) {
+            this.behaaldeModules += (int) behaaldeModules;
+            return true;
         }
+        return false;
     }
 
 
-    @Override
-    public String toString() {
-        String cppResultaat = "niet behaald";
-        if (behaaldeModules >= cpp.getAantalModules()){
+    /**
+     * Bepaalt de status van het CPP voor een scholier.
+     *
+     * @return De status.
+     */
+    public boolean isGeslaagd(){
+        Cpp cpp = (Cpp)getProgramma();
+        return behaaldeModules >= cpp.getAantalModules();
+    }
 
-            cppResultaat = "behaald";
+    /**
+     * Geeft alle scholer gerelateerde info weer.
+     *
+     * @return Informatie over de scholer
+     */
+    public String getStudentInfo(){
+
+        String status = "geslaagd";
+        if (!isGeslaagd()){
+
+            status = "niet " + status;
 
         }
-        return getNaam() + ", " + cpp.getNaam() + ", " + behaaldeModules
-                + " modules, " + cppResultaat + "\n";
+        Cpp cpp = (Cpp)getProgramma();
+
+        return getNaam() + ", " + cpp.getNaam() + ", " + behaaldeModules + " behaalde modules, " + status + "\n";
+
+    }
+
+    @Override
+    public String toString() {
+
+        Cpp cpp = (Cpp)getProgramma();
+        return "Regulier: \nNaam: " + getNaam() + "\nbehaalde modules: " +  behaaldeModules + "Programma: " + getProgramma();
     }
 }

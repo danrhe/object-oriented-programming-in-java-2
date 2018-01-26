@@ -1,21 +1,35 @@
 package studentenadmin;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Deze klasse beheert alle studenten van de studentenadministratie
+ * Beheert alle studenten en studie programma's.
  */
 public class StudentenAdmin {
 
-    private ArrayList<Student> studenten = new ArrayList<>();
+    /**
+     * Container voor alle studenten objecten.
+     */
+    private List<Student> studenten = new ArrayList<>();
+    /**
+     * Container voor alle studie programma objecten.
+     */
+    private List<Programma> programmas = new ArrayList<>();
 
 
     /**
-     * Zoekt een student op basis van zijn naam
+     * Default constructor.
+     */
+    public StudentenAdmin(){}
+
+
+    /**
+     * Zoekt een student op basis van zijn naam.
      *
-     * @param naam naam van de student
+     * @param naam Naam van de student.
      *
-     * @return het eerste, op naam matchende student
+     * @return De eerste, op naam matchende student of null.
      */
     private Student getStudent(String naam){
 
@@ -31,120 +45,185 @@ public class StudentenAdmin {
     }
 
     /**
-     * Voegt een nieuwe reguliere student aan de administratie toe
+     * Zoekt een studieprogramma op basis van zijn naam.
      *
-     * @param naam naam van de student
-     * @param opleiding de opleiding waarvoor de student ingeschreven staat
+     * @param naam De naam van het programma.
      *
-     * @return succes van de operatie
+     * @return Een gegeven studieprogramma.
      */
-    public boolean maakNieuweRegulier(String naam, Opleiding opleiding){
+    public Programma getProgramma(String naam){
 
-        Student student = new Regulier(naam, opleiding);
-        studenten.add(student);
+        for (Programma programma : programmas){
 
-        return true;
-    }
+            if (programma.getNaam().equals(naam)){
 
-    /**
-     * Voegt een nieuwe scholer aan de administratie toe
-     *
-     * @param naam naam van de student
-     * @param cpp professional program waarvoor student ingeschreven staat
-     *
-     * @return succes van de operatie
-     */
-    public boolean maakNieuweScholer(String naam, Cpp cpp){
+                return programma;
 
-        Student student = new Scholer(naam, cpp);
-        studenten.add(student);
+            }
+        }
 
-        return true;
+        return null;
+
     }
 
 
     /**
-     * Verhoogt het aantal behaalde studiepunten van een student.
+     * Geeft de name van de klasse van een student weer.
      *
-     * @param naam naam van de student.
-     * @param studiepunten studiepunten die de student heeft behaald.
+     * @param naam De naam van een student.
      *
-     * @return succes van de operatie.
+     * @return de klassennaam van de gevonden student.
      */
-    public boolean verhoogBehaaldeStudiepuntenStudent(String naam, double studiepunten){
+    public String getStudentKlassenNaam(String naam){
 
         Student student = getStudent(naam);
 
-        if(student != null && student.getClass().getName().equals("studentenadmin.Regulier")){
+        if(student != null) {
 
-            ((Regulier)student).setBehaaldeStudiepunten(((Regulier)student).getBehaaldeStudiepunten() + studiepunten);
-            return true;
+            return student.getClass().getName();
+        }
+
+
+        return null;
+    }
+
+    /**
+     * Voegt een nieuw programma toe aan de lijst van programmas.
+     *
+     * @param programma Het nieuwe programma.
+     *
+     * @return De status van de operatie.
+     */
+    public boolean voegProgrammaToe(Programma programma){
+
+        programmas.add(programma);
+        return true;
+    }
+
+
+
+    /**
+     * Voegt een student toe aan de lijst van studenten.
+     *
+     * @param student Een nieuwe student.
+     *
+     * @return Succes van de operatie.
+     */
+    public boolean voegStudentToe(Student student){
+
+        // todo robuust maken van de applicatie in vorm van checks
+        // if(student instanceof Regulier && student.getProgramma() instanceof Opleiding){}
+        // if(student instanceof Scholer && student.getProgramma() instanceof Cpp){}
+
+        studenten.add(student);
+        return true;
+
+    }
+
+
+    /**
+     * Verhoogt de hoeveelheid behaalde programmaonderdelen.
+     *
+     * @param naam Naam van de student.
+     *
+     * @param hoeveelheid Hoeveelheid waarmee de student vordering geboekt heeft.
+     *
+     * @return Succes van de operatie.
+     */
+    public boolean verhoogBehaaldeProgrammaOnderdelen(String naam, double hoeveelheid){
+
+        Student student = getStudent(naam);
+
+        if(student != null){
+
+            return student.verhoogBehaaldProgrammaOnderdeel(hoeveelheid);
 
         }
 
         return false;
     }
 
-    /**
-     * Verhoogt het aantal behaalde cpp modules van een student met 1.
-     *
-     * @param naam naam van de student.
-     *
-     * @return succes van de operatie.
-     */
-    public boolean verhoogBehaaldeModuleStudentMetEen(String naam){
-
-        Student student = getStudent(naam);
-
-        if(student != null && student.getClass().getName().equals("studentenadmin.Scholer")){
-
-            ((Scholer)student).setBehaaldeModules(((Scholer)student).getBehaaldeModules() + 1);
-            return true;
-
-        }
-
-        return false;
-    }
 
     /**
      * Geeft de gegevens van een student weer.
      *
-     * @param naam de naam van de student
+     * @param naam De naam van de student.
      *
-     * @return de gegevens van een student
+     * @return De gegevens van een student.
      */
     public String getStudentInfo(String naam){
-
-        String result = "";
 
         Student gevondenStudent = getStudent(naam);
 
         if (gevondenStudent != null){
 
-            result = gevondenStudent.toString();
+            return gevondenStudent.getStudentInfo();
 
         }
 
-        return result;
+        return null;
 
     }
 
 
     /**
-     * Geeft alle studentengegevens weer
+     * Geeft alle studentengegevens weer.
      *
-     * @return Alle studentengegevens
+     * @return Alle studentengegevens.
      */
-    public String getAllStudentInfo(){
+    public String getAlleStudentenInfo(){
 
         String result = "";
 
-        String naam;
         for (Student student: studenten){
-            naam = student.getNaam();
-            result += getStudentInfo(naam);
+            result += student.getStudentInfo();
         }
 
         return result;
     }
+
+    /**
+     * Zoekt de namen van alle 'CPP'-programma's.
+     *
+     * @return Verzameling van namen van CPP programmas.
+     */
+    public List<String> getAlleCppNamen(){
+
+        List<String> namenLijst = new ArrayList<String>();
+
+        for (Programma programma : programmas) {
+            if (programma instanceof Cpp) {
+
+                namenLijst.add(programma.getNaam());
+
+            }
+
+        }
+
+        return namenLijst;
+
+    }
+
+    /**
+     * Zoekt de namen van alle reguliere opleidingen.
+     *
+     * @return Verzameling van namen van opleiding programmas.
+     */
+    public List<String> getAlleOpleidingNamen(){
+
+        List<String> namenLijst = new ArrayList<String>();
+
+        for (Programma programma : programmas) {
+
+            if (programma instanceof Opleiding) {
+
+                namenLijst.add(programma.getNaam());
+
+            }
+
+        }
+        return namenLijst;
+
+    }
+
 }

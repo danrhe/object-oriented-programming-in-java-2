@@ -5,7 +5,6 @@ package studentenadmin;
  */
 public class Regulier extends Student{
 
-    private Opleiding opleiding = null;
     private double behaaldeStudiepunten = 0.0;
 
     /**
@@ -15,32 +14,75 @@ public class Regulier extends Student{
      * @param opleiding opleiding die de student volgt.
      */
     public Regulier(String naam, Opleiding opleiding) {
-        super(naam);
-        this.opleiding = opleiding;
+        super(naam, opleiding);
 
     }
 
     public double getBehaaldeStudiepunten() {
+
         return behaaldeStudiepunten;
     }
 
-    public void setBehaaldeStudiepunten(double behaaldeStudiepunten) {
+    /**
+     * Past het aantaal behaalde studiepunten aan mits het aantal studiepunten niet groter is dan het aantal
+     * studiepunten van de opleiding.
+     *
+     * @param behaaldeStudiepunten Het nieuwe aantal behaalde studiepunten.
+     */
+    public boolean verhoogBehaaldProgrammaOnderdeel(double behaaldeStudiepunten) {
 
-        if (behaaldeStudiepunten <= opleiding.getAantalStudiepunten()) {
-            this.behaaldeStudiepunten = behaaldeStudiepunten;
+        Opleiding opleiding = (Opleiding)getProgramma();
+
+        if (this.behaaldeStudiepunten + behaaldeStudiepunten <= opleiding.getAantalStudiepunten()) {
+            this.behaaldeStudiepunten = this.behaaldeStudiepunten + behaaldeStudiepunten;
+            return true;
         }
+        return false;
+
     }
+
+
+
+    /**
+     * Stelt vast of student geslaagd is voor de opleiding.
+     *
+     * @return Status van de opleiding.
+     */
+    public boolean isGeslaagd(){
+
+        Opleiding opleiding = (Opleiding)getProgramma();
+
+        return behaaldeStudiepunten >= opleiding.getAantalStudiepunten();
+    }
+
+
+    /**
+     * Geeft alle scholer gerelateerde info weer.
+     *
+     * @return Informatie over de scholer
+     */
+    public String getStudentInfo(){
+
+        String status = "geslaagd";
+        if (!isGeslaagd()){
+
+            status = "niet " + status;
+
+        }
+
+        Opleiding opleiding = (Opleiding)getProgramma();
+
+        return getNaam() + ", " + opleiding.getNaam() + ", " + behaaldeStudiepunten + " studiepunten, " + status + "\n";
+
+    }
+
 
 
     @Override
     public String toString() {
-        String studieresultaat = "niet geslaagd";
 
-        if (behaaldeStudiepunten >= opleiding.getAantalStudiepunten()){
-            studieresultaat = "geslaagd";
-        }
+        Opleiding opleiding = (Opleiding)getProgramma();
 
-        return getNaam() + ", " + opleiding.getNaam() + ", " + behaaldeStudiepunten
-        + " studiepunten, " + studieresultaat + "\n";
+        return getNaam() + ", " + opleiding.getNaam() + ", " + behaaldeStudiepunten + " studiepunten\n";
     }
 }

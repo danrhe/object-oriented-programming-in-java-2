@@ -3,35 +3,34 @@ package studentenadmin;
 /**
  * Beheert professional program gerelateerde informatie
  */
-public class Cpp {
-
-    private String naam = null;
+public class Cpp extends Programma {
 
     private int aantalModules = 0;
 
 
+    /**
+     * Default constructor.
+     *
+     * @param naam De naam van het professional program.
+     * @param aantalModules Het aantal modules die behaalt moeten worden om voor het programma te slagen.
+     */
+    public Cpp(String naam, int aantalModules){
 
-    public Cpp(String naam){
-
-        this.naam = naam;
+        super(naam);
+        this.aantalModules = aantalModules;
 
     }
 
-    public String getNaam() {
-        return naam;
-    }
-
-    public void setNaam(String naam) {
-
-        this.naam = naam;
-    }
 
     public int getAantalModules() {
+
         return aantalModules;
     }
 
-    public void setAantalModules(int aantalModules) {
-        this.aantalModules = aantalModules;
-    }
 
+    @Override
+    public String toString() {
+        return "Cpp:" + " naam='" + getNaam()+ '\n' + "aantal modules=" + aantalModules + '\n';
+    }
 }
+
