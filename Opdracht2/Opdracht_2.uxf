@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>6</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>294</x>
+      <y>0</y>
+      <w>360</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>StudentenAdmin
+--
+
+--
++ StudentenAdmin()
+- getStudent(String naam): Student
+- getProgramma(String naam): Programma
++ getStudentKlassenNaam(String naam): String
++ voegProgrammaToe(Programma programma): boolean
++ voegStudentToe(Student student): boolean
++ verhoogBehaaldeProgrammaOnderdelen(String naam, double behaald)
++ getStudentInfo(String naam): String
++ getAlleStudentenInfo(): String
++ getAlleCppNamen(): List&lt;String&gt;
++ getAlleOpleidingNamen(): List&lt;String&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>588</x>
+      <y>192</y>
+      <w>270</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>/Student/
+--
+- naam: String
+--
++ Student(String naam, Programma programma)
+/+ verhoogBehaaldeProgrammaOnderdelen(double/
+/  hoeveelheid) : boolean/
+/+ isGeslaagd(): boolean/
+/+ getStudentInfo(): String/
++ getNaam(): String
++ toString(): String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>384</y>
+      <w>204</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>Scholer
+--
+- behaaldeModules: int
+--
++ Scholer(String naam, Cpp cpp)
++ getBehaaldeModules(): int
++ verhoogBehaaldProgrammaOnderdeel(double 
+  behaaldeModules) boolean
++ isGeslaagd(): boolean
++ getStudentInfo(): String
++ toString(): String
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>480</x>
+      <y>384</y>
+      <w>228</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>Regulier
+--
+- behaaldeStudiepunten: double
+--
++ Regulier(String naam, Opleiding opleiding)
++ getBehaaldeStudiepunten(): double
++ verhoogBehaaldProgrammaOnderdeel(double 
+  behaaldeStudiepunten): boolean
++ isGeslaagd(): boolean
++ getStudentInfo(): String
++ toString(): String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>288</y>
+      <w>132</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>200.0;10.0;200.0;60.0;10.0;60.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>714</x>
+      <y>288</y>
+      <w>120</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;180.0;60.0;180.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>390</y>
+      <w>228</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Opleiding
+--
+- aantalStudiepunten: double
+--
++ Opleiding (String naam, double aantalStudiepunten)
++ getAantalStudiepunten(): double
++ toString(): String
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>648</x>
+      <y>66</y>
+      <w>84</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+
+m2=*
+
+</panel_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0;120.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>234</x>
+      <y>390</y>
+      <w>216</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Cpp
+--
+- aantalModules: int
+--
++ Cpp(String naam, int aantalModules)
++ getAantalModules(): int
++ toString(): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>156</x>
+      <y>192</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>/Programma/
+--
+- naam: String
+--
++ Programma (String naam)
++ getNaam(): String
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>228</x>
+      <y>72</y>
+      <w>78</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+
+m2=*
+
+</panel_attributes>
+    <additional_attributes>110.0;20.0;10.0;20.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>108</x>
+      <y>258</y>
+      <w>138</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>210.0;10.0;210.0;100.0;10.0;100.0;10.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>228</x>
+      <y>258</y>
+      <w>138</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0;210.0;100.0;210.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>216</y>
+      <w>288</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;460.0;10.0</additional_attributes>
+  </element>
+</diagram>
