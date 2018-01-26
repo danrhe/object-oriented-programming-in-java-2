@@ -1,6 +1,15 @@
 package studentadmingui;
 
-import studentenadmin.*;
+/*
+Ik heb bewust ervoor gekozen om meerdere imports van de studentenadmin-package te plaatsen om 1) de uitbreidbaarheid van de applicatie
+te bevorderen. Nu kunnen zonder problemen nieuwe subklassen van Programma / Student toegevoegd worden zonder dat de superklassen of
+studentenadmin veranderen.
+ */
+import studentenadmin.StudentenAdmin;
+import studentenadmin.Opleiding;
+import studentenadmin.Cpp;
+import studentenadmin.Regulier;
+import studentenadmin.Scholer;
 
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -8,6 +17,7 @@ import javax.swing.JComboBox;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -68,26 +78,43 @@ public class StudentAdminFrame extends JFrame {
   }
 
   /**
-   * Verbindt de gui met de domeinlaag
+   * Verbindt de gui met de domeinlaag, vult de applicatie met data en initialiseert veld-waardes van de gui.
    */
   private void mijnInitialize() {
 
     studentenAdmin = new StudentenAdmin();
 
+    studentenAdmin.voegProgrammaToe(new Opleiding("Wiskunde", 160));
+    studentenAdmin.voegProgrammaToe(new Opleiding("Informatica", 120));
+    studentenAdmin.voegProgrammaToe(new Cpp("CPP Softwarearchitect", 4));
+    studentenAdmin.voegProgrammaToe(new Cpp("CPP Java", 6));
+    studentenAdmin.voegProgrammaToe(new Cpp("CPP System Ontwikkelaar", 3));
+
+
     /*
-    toevoegen van items aan de keuze "student"
+    toevoegen van items aan keuzes voor reguliere studenten
      */
-    for (OpleidingKeuze keuze : OpleidingKeuze.values()){
-      opleidingComboBox.addItem(keuze.getNaam());
+    List<String> opleidingNamen = studentenAdmin.getAlleOpleidingNamen();
+
+    for (String opleidingNaam : opleidingNamen){
+
+        opleidingComboBox.addItem(opleidingNaam);
+
     }
+
     opleidingComboBox.setSelectedIndex(-1);
 
     /*
-    toevoegen van items aan de keuze "scholer"
+    toevoegen van items aan keuzes voor scholers
      */
-   for (CppKeuze keuze : CppKeuze.values()){
-      scholingComboBox.addItem(keuze.getNaam());
+    List<String> cppNamen = studentenAdmin.getAlleCppNamen();
+
+    for (String cppNaam : cppNamen){
+
+      scholingComboBox.addItem(cppNaam);
+
     }
+
     scholingComboBox.setSelectedIndex(-1);
 
   }
@@ -97,30 +124,16 @@ public class StudentAdminFrame extends JFrame {
    */
   private void studentButtonAction(){
 
-    String naam = studentTextField.getText();
+    String studentNaam = studentTextField.getText();
 
-    int indexOpleiding = opleidingComboBox.getSelectedIndex();
-    OpleidingKeuze keuze = OpleidingKeuze.values()[indexOpleiding];
+    String opleidingNaam = opleidingComboBox.getSelectedItem().toString();
 
-    Opleiding opleiding = null;
+    Opleiding opleiding = (Opleiding)studentenAdmin.getProgramma(opleidingNaam);
 
-    switch (keuze){
-      case WISKUNDE:
+    Regulier regulier = new Regulier(studentNaam, opleiding);
 
-        opleiding = new Wiskunde();
+    studentenAdmin.voegStudentToe(regulier);
 
-        break;
-
-      case INFORMATICA:
-        opleiding = new Informatica();
-        break;
-
-      default:
-        opleiding = new Opleiding("niet geimplementeerd");
-        break;
-
-    }
-    studentenAdmin.maakNieuweRegulier(naam, opleiding);
   }
 
   /**
@@ -128,30 +141,15 @@ public class StudentAdminFrame extends JFrame {
    */
   private void scholerButtonAction(){
 
-    String naam = scholerTextField.getText();
+    String scholerNaam = scholerTextField.getText();
 
-    int indexCpp = scholingComboBox.getSelectedIndex();
-    CppKeuze keuze = CppKeuze.values()[indexCpp];
+    String cppNaam = scholingComboBox.getSelectedItem().toString();
 
-    Cpp cpp = null;
+    Cpp cpp = (Cpp)studentenAdmin.getProgramma(cppNaam);
 
-    switch (keuze){
-      case CPPJAVA:
-        cpp = new CppJava();
-        break;
-      case CPPSOFTARCHITECT:
-        cpp = new CppSoftArchitect();
-        break;
-      case CPPSYSDEF:
-        cpp = new CppSysDev();
-        break;
-      default:
-        cpp = new Cpp("niet geimplementeerd");
-        break;
-    }
+    Scholer scholer = new Scholer(scholerNaam, cpp);
 
-    studentenAdmin.maakNieuweScholer(naam, cpp);
-
+    studentenAdmin.voegStudentToe(scholer);
   }
 
 
@@ -182,10 +180,12 @@ public class StudentAdminFrame extends JFrame {
 
     double d1 = Double.parseDouble(puntenVeld.getText());
 
-    if (info.length() > 0 && d1 > 0.0){
+    if (info.length() > 0 && d1 > 0.0 && studentenAdmin.getStudentKlassenNaam(naam).equals("studentenadmin.Regulier")){
 
-      studentenAdmin.verhoogBehaaldeStudiepuntenStudent(naam, d1);
+      studentenAdmin.verhoogBehaaldeProgrammaOnderdelen(naam, d1);
+
       info = studentenAdmin.getStudentInfo(naam);
+
       studentInfoVeld.setText(info);
 
     }
@@ -200,10 +200,12 @@ public class StudentAdminFrame extends JFrame {
     String naam = bestaandeNaamVeld.getText();
     String info = studentenAdmin.getStudentInfo(naam);
 
-    if (info.length() > 0){
+    if (info.length() > 0 && studentenAdmin.getStudentKlassenNaam(naam).equals("studentenadmin.Scholer")){
 
-      studentenAdmin.verhoogBehaaldeModuleStudentMetEen(naam);
+      studentenAdmin.verhoogBehaaldeProgrammaOnderdelen(naam, 1.0);
+
       info = studentenAdmin.getStudentInfo(naam);
+
       studentInfoVeld.setText(info);
 
     }
@@ -214,7 +216,7 @@ public class StudentAdminFrame extends JFrame {
    * Action handler voor het drukken van de knop "Module behaald" op tab "info student"
    */
   private void toonAlleKnopAction(){
-    String text = studentenAdmin.getAllStudentInfo();
+    String text = studentenAdmin.getAlleStudentenInfo();
 
     uitvoerGebied.setText(text);
 
