@@ -13,7 +13,11 @@ public abstract class Programma {
      *
      * @param naam De naam van een studie programma
      */
-    public Programma(String naam){
+    public Programma(String naam) throws StudentenAdminException{
+
+        if (naam == null){
+           throw new StudentenAdminException("Naam mag niet onbekend zijn");
+        }
 
         this.naam = naam;
     }

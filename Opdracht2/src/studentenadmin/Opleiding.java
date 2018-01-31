@@ -13,7 +13,7 @@ public class Opleiding extends Programma {
      * @param naam Naam van de opleiding.
      * @param aantalStudiepunten Her aantal studiepunten die nodig is om te slagen voor de opleiding.
      */
-    public Opleiding(String naam, double aantalStudiepunten){
+    public Opleiding(String naam, double aantalStudiepunten) throws StudentenAdminException{
         super(naam);
         this.aantalStudiepunten = aantalStudiepunten;
     }

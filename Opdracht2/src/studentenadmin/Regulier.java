@@ -50,6 +50,12 @@ public class Regulier extends Student{
 
         }
 
+        if (this.behaaldeStudiepunten + behaaldeStudiepunten < 0) {
+
+            throw new StudentenAdminException("Aantal behaalde studiepunten is kleiner dan 0");
+
+        }
+
         this.behaaldeStudiepunten = this.behaaldeStudiepunten + behaaldeStudiepunten;
 
     }

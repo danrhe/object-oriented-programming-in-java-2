@@ -4,6 +4,7 @@ package studentenadmin;
  * Beheert de gegevens van een student.
  */
 public abstract class Student {
+
     private String naam = null;
     private Programma programma = null;
 
@@ -14,11 +15,12 @@ public abstract class Student {
      *
      * @param programma Het programma waarvoor de student ingeschreven staat.
      *
-     * @throws StudentenAdmin Wordt gegooid als naam van de student minder dan 2 letters bevat
+     * @throws StudentenAdminException Wordt gegooid als naam van de student minder dan 2 letters bevat
      */
     public Student(String naam, Programma programma) throws StudentenAdminException{
 
         String opgeschoondeString = schoonStringOp(naam);
+
         if (!stringIsMinimaalTweeLetters(opgeschoondeString)){
 
             throw new StudentenAdminException("De naam van een student moet minimaal 2 letters bevatten");
@@ -26,6 +28,42 @@ public abstract class Student {
 
         this.naam = opgeschoondeString;
         this.programma = programma;
+    }
+
+    /**
+     * Check van de status van het studie programma van een student.
+     *
+     * @return Status van het studie programma van een student.
+     */
+    public abstract boolean isGeslaagd();
+
+    /**
+     * Geeft de gegevens van een student weer inclusief studiestatus.
+     *
+     * @return Status van het studie programma van een student.
+     */
+    public abstract String getStudentInfo() ;
+
+
+    public String getNaam() {
+
+        return naam;
+    }
+
+
+    public Programma getProgramma() {
+
+        return programma;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "naam='" + naam + '\'' +
+                ", programma=" + programma +
+                '}';
     }
 
     /**
@@ -78,40 +116,5 @@ public abstract class Student {
         return (String.valueOf(goedeChars));
 
     }
-    /**
-     * Check van de status van het studie programma van een student.
-     *
-     * @return Status van het studie programma van een student.
-     */
-    public abstract boolean isGeslaagd();
 
-    /**
-     * Geeft de gegevens van een student weer inclusief studiestatus.
-     *
-     * @return Status van het studie programma van een student.
-     */
-    public abstract String getStudentInfo() ;
-
-
-
-    public String getNaam() {
-
-        return naam;
-    }
-
-
-    public Programma getProgramma() {
-
-        return programma;
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "naam='" + naam + '\'' +
-                ", programma=" + programma +
-                '}';
-    }
 }

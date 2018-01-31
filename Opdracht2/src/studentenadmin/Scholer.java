@@ -18,15 +18,11 @@ public class Scholer extends Student{
      */
     public Scholer (String naam, Programma cpp) throws StudentenAdminException{
         super(naam, cpp);
-        if (!cpp.getClass().getName().equals("studentenadmin.Cpp")){
+        if (!(cpp instanceof Cpp)){
             throw new StudentenAdminException("Scholers mogen alleen met Cpp\'s gekoppeld worden");
         }
     }
 
-    public int getBehaaldeModules() {
-
-        return behaaldeModules;
-    }
 
     /**
      * Past het aantal behaalde modules van de scholer aan mits dit getal niet groter is dan het aantal modules van het
@@ -34,7 +30,7 @@ public class Scholer extends Student{
      *
      * @param behaaldeModules Het nieuwe aantal behaalde modules.
      *
-     * @throws StudentenAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP.
+     * @throws StudentenAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP of kleiner dan 0.
      */
     public void verhoogAantalModules(double behaaldeModules) throws StudentenAdminException{
 
@@ -45,6 +41,14 @@ public class Scholer extends Student{
             throw new StudentenAdminException("Aantal behaalde modules is groter dan deze CPP heeft");
 
         }
+
+        if (this.behaaldeModules + behaaldeModules < 0) {
+
+            throw new StudentenAdminException("Aantal behaalde modules is kleiner dan 0");
+
+        }
+
+
         this.behaaldeModules += (int) behaaldeModules;
 
     }
@@ -82,7 +86,6 @@ public class Scholer extends Student{
     @Override
     public String toString() {
 
-        Cpp cpp = (Cpp)getProgramma();
         return "Regulier: \nNaam: " + getNaam() + "\nbehaalde modules: " +  behaaldeModules + "Programma: " + getProgramma();
     }
 }

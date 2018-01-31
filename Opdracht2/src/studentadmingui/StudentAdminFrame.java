@@ -167,6 +167,11 @@ public class StudentAdminFrame extends JFrame {
 
             infoLabel.setText(studadminEx.getMessage());
 
+        } catch (NullPointerException nullEx) {
+
+            infoLabel.setText("CPP veld is niet geselecteed");
+
+
         } finally {
 
             scholerTextField.setText("");
@@ -201,8 +206,6 @@ public class StudentAdminFrame extends JFrame {
      */
     private void puntenVeldAction(){
 
-        String klassenNaam = "studentenadmin.Opleiding";
-
         String naam = bestaandeNaamVeld.getText();
 
         try {
@@ -221,7 +224,7 @@ public class StudentAdminFrame extends JFrame {
 
         } catch (NumberFormatException numFormEx){
 
-            infoLabel.setText(numFormEx.getMessage());
+            infoLabel.setText("Input kan niet naar double overgezet worden");
         }
 
     }

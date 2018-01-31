@@ -15,10 +15,10 @@ public class Cpp extends Programma {
      *
      * @param aantalModules Het aantal modules die behaalt moeten worden om voor het programma te slagen.
      */
-    public Cpp(String naam, int aantalModules){
+    public Cpp(String naam, int aantalModules) throws StudentenAdminException{
 
         super(naam);
-        this.aantalModules = (int)aantalModules;
+        this.aantalModules = aantalModules;
 
     }
 
