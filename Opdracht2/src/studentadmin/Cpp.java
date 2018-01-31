@@ -1,4 +1,4 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert professional program gerelateerde informatie
@@ -15,7 +15,7 @@ public class Cpp extends Programma {
      *
      * @param aantalModules Het aantal modules die behaalt moeten worden om voor het programma te slagen.
      */
-    public Cpp(String naam, int aantalModules) throws StudentenAdminException{
+    public Cpp(String naam, int aantalModules){
 
         super(naam);
         this.aantalModules = aantalModules;

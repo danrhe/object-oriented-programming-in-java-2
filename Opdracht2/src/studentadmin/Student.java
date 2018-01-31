@@ -1,4 +1,4 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert de gegevens van een student.
@@ -15,15 +15,15 @@ public abstract class Student {
      *
      * @param programma Het programma waarvoor de student ingeschreven staat.
      *
-     * @throws StudentenAdminException Wordt gegooid als naam van de student minder dan 2 letters bevat
+     * @throws StudentAdminException Wordt gegooid als naam van de student minder dan 2 letters bevat
      */
-    public Student(String naam, Programma programma) throws StudentenAdminException{
+    public Student(String naam, Programma programma) throws StudentAdminException {
 
         String opgeschoondeString = schoonStringOp(naam);
 
         if (!stringIsMinimaalTweeLetters(opgeschoondeString)){
 
-            throw new StudentenAdminException("De naam van een student moet minimaal 2 letters bevatten");
+            throw new StudentAdminException("De naam van een student moet minimaal 2 letters bevatten");
         }
 
         this.naam = opgeschoondeString;

@@ -1,4 +1,4 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert de gegevens van een regulier ingeschreven student.
@@ -14,15 +14,15 @@ public class Regulier extends Student{
      *
      * @param opleiding opleiding die de student volgt.
      *
-     * @throws StudentenAdminException Wordt gegooid als programma geen instantie van de subklasse opleiding is
+     * @throws StudentAdminException Wordt gegooid als programma geen instantie van de subklasse opleiding is
      *
      */
-    public Regulier(String naam, Programma opleiding) throws StudentenAdminException{
+    public Regulier(String naam, Programma opleiding) throws StudentAdminException {
         super(naam, opleiding);
 
         if (!(opleiding instanceof Opleiding)){
 
-            throw new StudentenAdminException("Reguliere studenten mogen alleen met opleidingen gekoppeld worden");
+            throw new StudentAdminException("Reguliere studenten mogen alleen met opleidingen gekoppeld worden");
         }
     }
 
@@ -33,22 +33,22 @@ public class Regulier extends Student{
      *
      * @param behaaldeStudiepunten Het nieuwe aantal behaalde studiepunten.
      *
-     * @throws StudentenAdminException Wordt gegooid als het aantal behaalde studiepunten groter wordt dan aantal studiepunten
+     * @throws StudentAdminException Wordt gegooid als het aantal behaalde studiepunten groter wordt dan aantal studiepunten
      * van de opleiding.
      */
-    public void verhoogBehaaldeStudiepunten(double behaaldeStudiepunten) throws StudentenAdminException{
+    public void verhoogBehaaldeStudiepunten(double behaaldeStudiepunten) throws StudentAdminException {
 
         Opleiding opleiding = (Opleiding)getProgramma();
 
         if (this.behaaldeStudiepunten + behaaldeStudiepunten > opleiding.getAantalStudiepunten()) {
 
-            throw new StudentenAdminException("Aantal behaalde studiepunten is groter dan het aantal studiepunten van de opleiding");
+            throw new StudentAdminException("Aantal behaalde studiepunten is groter dan het aantal studiepunten van de opleiding");
 
         }
 
         if (this.behaaldeStudiepunten + behaaldeStudiepunten < 0) {
 
-            throw new StudentenAdminException("Aantal behaalde studiepunten is kleiner dan 0");
+            throw new StudentAdminException("Aantal behaalde studiepunten is kleiner dan 0");
 
         }
 

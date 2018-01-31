@@ -1,4 +1,4 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert de gegevens van een scholer.
@@ -14,12 +14,12 @@ public class Scholer extends Student{
      *
      * @param cpp Professional program.
      *
-     * @throws StudentenAdminException Wordt gegooid als programma geen instantie van de subklasse Cpp is
+     * @throws StudentAdminException Wordt gegooid als programma geen instantie van de subklasse Cpp is
      */
-    public Scholer (String naam, Programma cpp) throws StudentenAdminException{
+    public Scholer (String naam, Programma cpp) throws StudentAdminException {
         super(naam, cpp);
         if (!(cpp instanceof Cpp)){
-            throw new StudentenAdminException("Scholers mogen alleen met Cpp\'s gekoppeld worden");
+            throw new StudentAdminException("Scholers mogen alleen met Cpp\'s gekoppeld worden");
         }
     }
 
@@ -30,21 +30,21 @@ public class Scholer extends Student{
      *
      * @param behaaldeModules Het nieuwe aantal behaalde modules.
      *
-     * @throws StudentenAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP of kleiner dan 0.
+     * @throws StudentAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP of kleiner dan 0.
      */
-    public void verhoogAantalModules(double behaaldeModules) throws StudentenAdminException{
+    public void verhoogAantalModules(double behaaldeModules) throws StudentAdminException {
 
         Cpp cpp = (Cpp)getProgramma();
 
         if(this.behaaldeModules + (int)behaaldeModules  > cpp.getAantalModules()) {
 
-            throw new StudentenAdminException("Aantal behaalde modules is groter dan deze CPP heeft");
+            throw new StudentAdminException("Aantal behaalde modules is groter dan deze CPP heeft");
 
         }
 
         if (this.behaaldeModules + behaaldeModules < 0) {
 
-            throw new StudentenAdminException("Aantal behaalde modules is kleiner dan 0");
+            throw new StudentAdminException("Aantal behaalde modules is kleiner dan 0");
 
         }
 

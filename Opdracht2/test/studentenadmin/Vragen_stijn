@@ -1,6 +1,19 @@
 Vragen over implementatie
 
 Hoi Stijn,
-Bedankt voor je mail. En vervelend om te horen dat de opdracht onvoldoende is. Zeker omdat het mijn streven is om de opdrachten niet zomaar a la 6-jes kultuur af te raffelen maar juist goede implementaties af te leveren. In die context hoorde ook om te proberen wat abstractie in het programmeerwerk te brengen. Maar zo te zien wordt dit afgestraft.
-Wat betekent dat verder? Mag je 1 onderdeel herkansen? En wat voor cijfer wordt er dan voor gegeven? Als je dan max een 6 voor je opdracht zou krijgen zou ik wel oneerlijk vinden want ik heb een andere implementatie die minder abstract/experimenteel is uit eigen kracht in opdracht 2 verwerkt (voor de deadline van opdracht 2 definitief) en die ook al naar te toe gestuurd had toen opdracht 1 beoordeeld werd. En, om eerlijk te zijn, had ik uiteindelijk graag een versie van opdracht 1 ingeleverd die meer op die van opdracht 2 lijkt, maar dat was niet mogelijk omdat Youlearn geen verandering van opgestuurde opdrachten toestaat.
+Bedankt voor je mail. En vervelend om te horen dat de opdracht onvoldoende is. Zeker omdat het mijn streven is om de opdrachten niet zomaar a la 6-jes kultuur af te raffelen maar juist goed werk af te leveren. Daarom had een wat complexere implementatie geprobeerd. Maar zo te zien wordt dit helaas niet beloond.
+Wat betekent dit verder? Mag je 1 onderdeel herkansen? En hoe wordt de herkansing beoordeelt? En tot wanneer moet ik het opsturen?
+
+Gezien het feit dat ik geen risico lopen wil om voor het hele vak te zakken wil ik graag van je aanbod gebruik maken en je advies vragen mbt bepaalde implementatiekeuzes waar ik over twijfel. Ik ga hier dan ook meteen vragen over opdracht 2 stellen want mijn plan van aanpak is om opdracht 2 af te ronden en dan de en exceptions en exception tests eruit te halen, anders krijg ik het qua tijd niet voor elkaar.
+
+- Ik heb zoals in mijn klassediagram te zien is voor een implementatie gekozen waarbij de super-klassen programma en student geassocieerd zijn. De klasse 'Student' heeft dus een attribuut programma met waarde null en een setter-methode. Het gevolg hiervan is dat de subklasse 'Regulier' en 'Scholer' gebruik moeten maken van een class-cast (bv (Opleiding)getProgramma() om de aantal studiepunten/modules te kunnen achterhalen). Is this the way to go?
+
+- Ik heb twee methoden in de StudentenAdmin-klasse die binnen de programmas / studentenlijst een student / programma met een bepaalde naam zoeken. Gezien de twee lijsten attributen van die klasse zijn lijkt mij dit de geschikte plek voor de exceptions. Echter, de methoden kunnen geen exception gooien omdat ik ze op twee manier gebruik, namelijk a) check voor dubbele entry en b) opzoeken van studen/programma info. Het probleem dat
+
+- In principe dwing ik de juiste combinatie van student-subklasse en programma-subklasse in de constructor af. Dus, in de lijst van studenten/programmas kunnen geen verkeerde combinaties staan. Bij het verhogen van studiepunten doe ik dan een class-cast op gevonden student om de subklasse specifieke methode te kunnen gebruiken. Dat zal altijd goed gaan. Moet ik alsnog de ClassCastException proberen te vangen? Lijkt me overbodig
+
+- in principe zou ik elke methode een handling voor null-waardes mee kunnen geven. Maar dat lijkt me te ver gaande, toch?
+- Ik verbaas me erover dat je in je slides min of meer suggereert meerdere checked exceptions te maken. In mijn code lijkt me dit eigenlijk niet nodig, vooral omdat je altijd een individuele boodschap mee kunt sturen.
+
+Je zegt dat we een exception daar moeten gooien waar de verantwoordelijkheid van de klasse met het attribuut ligt. Dat heb ik geprobeerd om te zetten en heeft als gevolg dat de meeste constructors nu een exception gooien
 

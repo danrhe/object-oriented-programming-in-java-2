@@ -1,7 +1,7 @@
 package studentadmingui;
 
-import studentenadmin.StudentenAdmin;
-import studentenadmin.StudentenAdminException;
+import studentadmin.StudentAdmin;
+import studentadmin.StudentAdminException;
 
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -21,7 +21,7 @@ import javax.swing.event.ChangeListener;
 
 public class StudentAdminFrame extends JFrame {
 
-    private StudentenAdmin studentenAdmin = null;
+    private StudentAdmin studentenAdmin = null;
 
     private static final long serialVersionUID = 1L;
     private JPanel jContentPane = null;
@@ -72,24 +72,11 @@ public class StudentAdminFrame extends JFrame {
     }
 
     /**
-     * Verbindt de gui met de domeinlaag, vult de applicatie met data en initialiseert veld-waardes van de gui.
+     * Verbindt de gui met de domeinlaag en initialiseert veld-waardes van de gui.
      */
     private void mijnInitialize() {
 
-        studentenAdmin = new StudentenAdmin();
-
-        try {
-            studentenAdmin.voegOpleidingToe("Wiskunde", 160);
-            studentenAdmin.voegOpleidingToe("Informatica", 120);
-            studentenAdmin.voegCppToe("CPP Softwarearchitect", 4);
-            studentenAdmin.voegCppToe( "CPP Java", 6);
-            studentenAdmin.voegCppToe("CPP System Ontwikkelaar", 3);
-
-        } catch (StudentenAdminException studaminEx) {
-
-            infoLabel.setText(studaminEx.getMessage());
-
-        }
+        studentenAdmin = new StudentAdmin();
 
     /*
     toevoegen van items aan keuzes voor reguliere studenten
@@ -133,7 +120,7 @@ public class StudentAdminFrame extends JFrame {
 
             infoLabel.setText("Reguliere student met naam " + studentNaam + " is succesvol toegevoegd." );
 
-        } catch (StudentenAdminException adminEx) {
+        } catch (StudentAdminException adminEx) {
 
             infoLabel.setText(adminEx.getMessage());
 
@@ -163,7 +150,7 @@ public class StudentAdminFrame extends JFrame {
 
             infoLabel.setText("Scholer met naam " + scholerNaam + " is succesvol toegevoegd." );
 
-        } catch (StudentenAdminException studadminEx) {
+        } catch (StudentAdminException studadminEx) {
 
             infoLabel.setText(studadminEx.getMessage());
 
@@ -192,7 +179,7 @@ public class StudentAdminFrame extends JFrame {
             String info = studentenAdmin.getStudentInfo(naam);
             studentInfoVeld.setText(info);
 
-        } catch (StudentenAdminException studadminEx){
+        } catch (StudentAdminException studadminEx){
 
             infoLabel.setText(studadminEx.getMessage());
 
@@ -218,9 +205,9 @@ public class StudentAdminFrame extends JFrame {
 
             studentInfoVeld.setText(info);
 
-        } catch (StudentenAdminException studentenAdminException){
+        } catch (StudentAdminException studentAdminException){
 
-            infoLabel.setText(studentenAdminException.getMessage());
+            infoLabel.setText(studentAdminException.getMessage());
 
         } catch (NumberFormatException numFormEx){
 
@@ -235,14 +222,14 @@ public class StudentAdminFrame extends JFrame {
     private void moduleKnopAction(){
 
         String naam = bestaandeNaamVeld.getText();
-        String klassenNaam = "studentenadmin.Cpp";
+        String klassenNaam = "Cpp";
 
         try {
             studentenAdmin.verhoogAantalModules(naam, 1.0);
             String info = studentenAdmin.getStudentInfo(naam);
             studentInfoVeld.setText(info);
 
-        } catch (StudentenAdminException studAdminEx){
+        } catch (StudentAdminException studAdminEx){
 
             infoLabel.setText(studAdminEx.getMessage());
         }
