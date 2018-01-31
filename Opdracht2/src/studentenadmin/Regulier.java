@@ -26,10 +26,6 @@ public class Regulier extends Student{
         }
     }
 
-    public double getBehaaldeStudiepunten() {
-
-        return behaaldeStudiepunten;
-    }
 
     /**
      * Past het aantaal behaalde studiepunten aan. mits het aantal studiepunten niet groter is dan het aantal
