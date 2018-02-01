@@ -25,6 +25,7 @@ public abstract class Programma {
 
     @Override
     public String toString() {
+
         return "Programma{" + "naam='" + naam + '\'' + '}';
     }
 }

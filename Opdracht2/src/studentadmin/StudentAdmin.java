@@ -47,7 +47,7 @@ public class StudentAdmin {
      *
      * @return De eerste, op naam matchende student of null.
      *
-     * @throws StudentAdminException Als student met opgegeven naam niet in de lijst met studenten staat
+     * @throws StudentAdminException Als student met opgegeven naam niet in de lijst met studenten staat.
      */
     private Student getBestaandeStudent(String naam) throws StudentAdminException {
         for (Student student : studentenLijst){
@@ -73,14 +73,10 @@ public class StudentAdmin {
         for (Student student : studentenLijst){
 
             if(student.getNaam().equals(naam)){
-
                 return true;
-
             }
         }
-
         return false;
-
     }
 
     /**
@@ -89,20 +85,18 @@ public class StudentAdmin {
      * @param naam De naam van het programma.
      *
      * @return Een gegeven studieprogramma of null.
+     *
+     * @throws StudentAdminException Als programm met opgegeven naam niet in lijst met programma's staat.
      */
     private Programma getBestaandProgramma(String naam) throws StudentAdminException {
 
         for (Programma programma : programmaLijst){
 
             if (programma.getNaam().equals(naam)){
-
                 return programma;
-
             }
         }
-
         throw new StudentAdminException("Programma met naam " + naam + " is niet bekend");
-
     }
 
 
@@ -114,17 +108,14 @@ public class StudentAdmin {
      * @return waar als programma al in het systeem staat
      */
     private boolean programmaBestaatAl(String naam){
+
         for (Programma programma : programmaLijst){
 
             if (programma.getNaam().equals(naam)){
-
                 return true;
-
             }
         }
-
         return false;
-
     }
 
 
@@ -140,13 +131,9 @@ public class StudentAdmin {
     public void voegOpleidingToe(String naam, double studiepunten) throws StudentAdminException {
 
         if (programmaBestaatAl(naam)){
-
             throw new StudentAdminException("Programma met deze naam bestaat al");
-
         }
-
         programmaLijst.add(new Opleiding(naam, studiepunten));
-
     }
 
     /**
@@ -156,18 +143,14 @@ public class StudentAdmin {
      *
      * @param modules Het aantal studiepunten.
      *
-     * @throws StudentAdminException Als programma met dezelfde naam al bestaat of toevoegen van programma misgaat.
+     * @throws StudentAdminException Als programma met dezelfde naam al bestaat.
      */
     public void voegCppToe(String naam, int modules) throws StudentAdminException {
 
         if (programmaBestaatAl(naam)){
-
             throw new StudentAdminException("Programma met deze naam bestaat al");
-
         }
-
         programmaLijst.add(new Cpp(naam, modules));
-
     }
 
 
@@ -179,17 +162,14 @@ public class StudentAdmin {
      *
      * @param opleidingNaam De naam van de opleiding.
      *
-     * @throws StudentAdminException Als studentnaam geregistreerd is.
+     * @throws StudentAdminException Als student met de naam al geregistreerd is of het programma geen instantie van Opleiding is.
      */
     public void voegRegulierToe(String studentNaam, String opleidingNaam) throws StudentAdminException {
 
         if (studentBestaatAl(studentNaam)){
-
             throw new StudentAdminException("Student met dezelfde naam staat al geregistreerd");
         }
-
         studentenLijst.add(new Regulier(studentNaam, getBestaandProgramma(opleidingNaam)));
-
     }
 
 
@@ -200,17 +180,15 @@ public class StudentAdmin {
      *
      * @param cppNaam De naam van de cpp.
      *
-     * @throws StudentAdminException Als student met de naam al geregistreerd is.
+     * @throws StudentAdminException Als student met de naam al geregistreerd is of het programma geen instantie van Cpp is.
      */
     public void voegScholerToe(String scholerNaam, String cppNaam) throws StudentAdminException {
 
         if (studentBestaatAl(scholerNaam)){
-
-                throw new StudentAdminException("Student met dezelfde naam staat al geregistreerd");
-            }
+            throw new StudentAdminException("Student met dezelfde naam staat al geregistreerd");
+        }
 
         studentenLijst.add(new Scholer(scholerNaam, getBestaandProgramma(cppNaam)));
-
     }
 
 
@@ -219,15 +197,20 @@ public class StudentAdmin {
      *
      * @param naam Naam van de student.
      *
-     * @param studiepunten Aantal studiepunten die een student gehaald heeft.
+     * @param behaaldePunten Aantal studiepunten die een student gehaald heeft.
      *
-     * @throws StudentAdminException Wordt gegooid als student onbekend is.
+     * @throws StudentAdminException Wordt gegooid als student onbekend of geen reguliere student is, of het aantal
+     *         behaalde punten van de student negatief of groter dan het aantal punten van de opleiding zou worden.
      */
-    public void verhoogAantalStudiepunten(String naam, double studiepunten) throws StudentAdminException {
+    public void verhoogAantalStudiepunten(String naam, double behaaldePunten) throws StudentAdminException {
 
         Student student = getBestaandeStudent(naam);
 
-        ((Regulier)student).verhoogBehaaldeStudiepunten(studiepunten);
+        if (!(student instanceof Regulier)){
+            throw new StudentAdminException("Alleen reguliere studenten kunnen studiepunten verhogen");
+        }
+
+        ((Regulier)student).verhoogBehaaldeStudiepunten(behaaldePunten);
     }
 
     /**
@@ -235,15 +218,20 @@ public class StudentAdmin {
      *
      * @param naam Naam van de student.
      *
-     * @param aantalModules Aantal modules die een student gehaald heeft.
+     * @param behaaldeModules Aantal modules die een student gehaald heeft.
      *
-     * @throws StudentAdminException Wordt gegooid als student onbekend is.
+     * @throws StudentAdminException Wordt gegooid als student onbekend of geen scholer is, of het aantal
+     *         behaalde punten van de student negatief of groter dan het aantal punten van het CPP zou worden.
      */
-    public void verhoogAantalModules(String naam, double aantalModules) throws StudentAdminException {
+    public void verhoogAantalModules(String naam, double behaaldeModules) throws StudentAdminException {
 
         Student student = getBestaandeStudent(naam);
 
-        ((Scholer)student).verhoogAantalModules(aantalModules);
+        if (!(student instanceof Scholer)){
+            throw new StudentAdminException("Alleen scholers kunnen modules verhogen");
+        }
+
+        ((Scholer)student).verhoogBehaaldeModules(behaaldeModules);
 
     }
 
@@ -294,16 +282,13 @@ public class StudentAdmin {
         List<String> namenLijst = new ArrayList<>();
 
         for (Programma programma : programmaLijst) {
+
             if (programma instanceof Cpp) {
-
                 namenLijst.add(programma.getNaam());
-
             }
-
         }
 
         return namenLijst;
-
     }
 
     /**

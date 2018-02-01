@@ -52,7 +52,7 @@ public class ScholerTest {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Aantal behaalde modules is groter dan deze CPP heeft");
 
-        scholer.verhoogAantalModules(7);
+        scholer.verhoogBehaaldeModules(7);
     }
 
 
@@ -60,6 +60,6 @@ public class ScholerTest {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Aantal behaalde modules is kleiner dan 0");
 
-        scholer.verhoogAantalModules(-1);
+        scholer.verhoogBehaaldeModules(-1);
     }
 }

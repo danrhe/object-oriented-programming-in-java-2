@@ -1,5 +1,6 @@
 package studentenadmin;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,15 +26,8 @@ public class StudentAdminTest {
         opleiding = new Opleiding("Test_Opleiding", 120.0);
 
         try {
-            studentAdmin.voegOpleidingToe("Wiskunde", 160.0);
-            studentAdmin.voegOpleidingToe("Informatica", 120.0);
-            studentAdmin.voegCppToe("CPP Softwarearchitect", 4);
-            studentAdmin.voegCppToe("CPP Java", 6);
-            studentAdmin.voegCppToe("CPP System Ontwikkelaar", 3);
-
             studentAdmin.voegRegulierToe("Tobias","Wiskunde");
             studentAdmin.voegScholerToe("Hans","CPP Java");
-
         } catch (StudentAdminException studaminEx) {
 
             System.out.println(studaminEx.getMessage());
@@ -42,6 +36,15 @@ public class StudentAdminTest {
 
 
     }
+
+    @After
+    public void afterTestMethod() {
+        studentAdmin = null;
+        cpp = null;
+        opleiding = null;
+
+    }
+
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -153,6 +156,14 @@ public class StudentAdminTest {
 
         studentAdmin.verhoogAantalStudiepunten("Tobias",-1.0);
     }
+    @Test
+
+    public void testVerhoogAantalStudiepuntenScholer() throws StudentAdminException {
+        thrown.expect(StudentAdminException.class);
+        thrown.expectMessage("Alleen reguliere studenten kunnen studiepunten verhogen");
+
+        studentAdmin.verhoogAantalStudiepunten("Hans",-1.0);
+    }
 
     @Test
     public void testVerhoogAantalModulesOnbekendStudent() throws StudentAdminException {
@@ -178,6 +189,14 @@ public class StudentAdminTest {
         thrown.expectMessage("Aantal behaalde modules is kleiner dan 0");
 
         studentAdmin.verhoogAantalModules("Hans",-1);
+    }
+
+    @Test
+    public void testVerhoogAantalModulesRegulier() throws StudentAdminException {
+        thrown.expect(StudentAdminException.class);
+        thrown.expectMessage("Alleen scholers kunnen modules verhogen");
+
+        studentAdmin.verhoogAantalModules("Tobias",4);
     }
 
     @Test
