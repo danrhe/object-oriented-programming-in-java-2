@@ -1,4 +1,4 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Representeert de overlappende eigenschappen van verschillende onderwijs programma's
@@ -25,6 +25,7 @@ public abstract class Programma {
 
     @Override
     public String toString() {
+
         return "Programma{" + "naam='" + naam + '\'' + '}';
     }
 }

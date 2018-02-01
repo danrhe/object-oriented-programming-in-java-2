@@ -1,4 +1,4 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert de gegevens van een scholer.
@@ -13,35 +13,30 @@ public class Scholer extends Student{
      * @param naam Naam van de student.
      *
      * @param cpp Professional program.
-     *
      */
-    public Scholer (String naam, Cpp cpp){
-
+    public Scholer (String naam, Programma cpp) {
         super(naam, cpp);
     }
 
-    public int getBehaaldeModules() {
-
-        return behaaldeModules;
-    }
 
     /**
      * Past het aantal behaalde modules van de scholer aan mits dit getal niet groter is dan het aantal modules van het
-     * cpp programma.
+     * cpp programma of kleiner dan 0.
      *
      * @param behaaldeModules Het nieuwe aantal behaalde modules.
-     *
-     * @return Success van de operatie.
      */
-    public boolean verhoogBehaaldProgrammaOnderdeel(double behaaldeModules) {
+    public void verhoogBehaaldeModules(int behaaldeModules) {
 
         Cpp cpp = (Cpp)getProgramma();
 
-        if(this.behaaldeModules + (int)behaaldeModules  <= cpp.getAantalModules()) {
-            this.behaaldeModules += (int) behaaldeModules;
-            return true;
+        boolean teVeel = this.behaaldeModules + behaaldeModules  > cpp.getAantalModules();
+
+        boolean kleinerNull = this.behaaldeModules + behaaldeModules < 0;
+
+        if (!(kleinerNull) && !(teVeel)){
+            this.behaaldeModules += behaaldeModules;
         }
-        return false;
+
     }
 
 
@@ -77,7 +72,6 @@ public class Scholer extends Student{
     @Override
     public String toString() {
 
-        Cpp cpp = (Cpp)getProgramma();
         return "Regulier: \nNaam: " + getNaam() + "\nbehaalde modules: " +  behaaldeModules + "Programma: " + getProgramma();
     }
 }

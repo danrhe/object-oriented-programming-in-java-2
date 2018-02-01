@@ -1,4 +1,4 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert de gegevens van een regulier ingeschreven student.
@@ -11,34 +11,31 @@ public class Regulier extends Student{
      * Default constructor.
      *
      * @param naam naam van de student.
+     *
      * @param opleiding opleiding die de student volgt.
      */
-    public Regulier(String naam, Opleiding opleiding) {
+    public Regulier(String naam, Programma opleiding) {
         super(naam, opleiding);
-
     }
 
-    public double getBehaaldeStudiepunten() {
-
-        return behaaldeStudiepunten;
-    }
 
     /**
-     * Past het aantaal behaalde studiepunten aan mits het aantal studiepunten niet groter is dan het aantal
-     * studiepunten van de opleiding.
+     * Past het aantaal behaalde studiepunten aan, mits het aantal studiepunten niet groter is dan het aantal
+     * studiepunten van de opleiding of kleiner dan 0.
      *
      * @param behaaldeStudiepunten Het nieuwe aantal behaalde studiepunten.
      */
-    public boolean verhoogBehaaldProgrammaOnderdeel(double behaaldeStudiepunten) {
+    public void verhoogBehaaldeStudiepunten(double behaaldeStudiepunten) {
 
         Opleiding opleiding = (Opleiding)getProgramma();
 
-        if (this.behaaldeStudiepunten + behaaldeStudiepunten <= opleiding.getAantalStudiepunten()) {
-            this.behaaldeStudiepunten = this.behaaldeStudiepunten + behaaldeStudiepunten;
-            return true;
-        }
-        return false;
+        boolean teVeel = this.behaaldeStudiepunten + behaaldeStudiepunten > opleiding.getAantalStudiepunten();
 
+        boolean kleinerNull = this.behaaldeStudiepunten + behaaldeStudiepunten < 0;
+
+        if (!(kleinerNull) && !(teVeel)){
+            this.behaaldeStudiepunten = this.behaaldeStudiepunten + behaaldeStudiepunten;
+        }
     }
 
 

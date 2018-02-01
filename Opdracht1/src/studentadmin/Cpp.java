@@ -1,4 +1,4 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert professional program gerelateerde informatie
@@ -10,8 +10,9 @@ public class Cpp extends Programma {
 
     /**
      * Default constructor.
-     *
+     **
      * @param naam De naam van het professional program.
+     *
      * @param aantalModules Het aantal modules die behaalt moeten worden om voor het programma te slagen.
      */
     public Cpp(String naam, int aantalModules){
