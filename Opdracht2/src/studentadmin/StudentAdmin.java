@@ -223,7 +223,7 @@ public class StudentAdmin {
      * @throws StudentAdminException Wordt gegooid als student onbekend of geen scholer is, of het aantal
      *         behaalde punten van de student negatief of groter dan het aantal punten van het CPP zou worden.
      */
-    public void verhoogAantalModules(String naam, double behaaldeModules) throws StudentAdminException {
+    public void verhoogAantalModules(String naam, int behaaldeModules) throws StudentAdminException {
 
         Student student = getBestaandeStudent(naam);
 

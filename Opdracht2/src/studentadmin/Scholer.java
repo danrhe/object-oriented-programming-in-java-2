@@ -32,11 +32,11 @@ public class Scholer extends Student{
      *
      * @throws StudentAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP of kleiner dan 0.
      */
-    public void verhoogBehaaldeModules(double behaaldeModules) throws StudentAdminException {
+    public void verhoogBehaaldeModules(int behaaldeModules) throws StudentAdminException {
 
         Cpp cpp = (Cpp)getProgramma();
 
-        if(this.behaaldeModules + (int)behaaldeModules  > cpp.getAantalModules()) {
+        if(this.behaaldeModules + behaaldeModules  > cpp.getAantalModules()) {
 
             throw new StudentAdminException("Aantal behaalde modules is groter dan deze CPP heeft");
 
@@ -49,7 +49,7 @@ public class Scholer extends Student{
         }
 
 
-        this.behaaldeModules += (int) behaaldeModules;
+        this.behaaldeModules += behaaldeModules;
 
     }
 
