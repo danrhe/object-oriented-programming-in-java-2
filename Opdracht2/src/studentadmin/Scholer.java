@@ -1,4 +1,4 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert de gegevens van een scholer.
@@ -14,18 +14,15 @@ public class Scholer extends Student{
      *
      * @param cpp Professional program.
      *
+     * @throws StudentAdminException Wordt gegooid als programma geen instantie van de subklasse Cpp is
      */
-    public Scholer (String naam, Programma cpp) throws StudentenAdminException{
+    public Scholer (String naam, Programma cpp) throws StudentAdminException {
         super(naam, cpp);
-        if (!cpp.getClass().getName().equals("studentenadmin.Cpp")){
-            throw new StudentenAdminException("Scholers mogen alleen met Cpp\'s gekoppeld worden");
+        if (!(cpp instanceof Cpp)){
+            throw new StudentAdminException("Scholers mogen alleen met Cpp\'s gekoppeld worden");
         }
     }
 
-    public int getBehaaldeModules() {
-
-        return behaaldeModules;
-    }
 
     /**
      * Past het aantal behaalde modules van de scholer aan mits dit getal niet groter is dan het aantal modules van het
@@ -33,17 +30,27 @@ public class Scholer extends Student{
      *
      * @param behaaldeModules Het nieuwe aantal behaalde modules.
      *
-     * @return Success van de operatie.
+     * @throws StudentAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP of kleiner dan 0.
      */
-    public boolean verhoogBehaaldProgrammaOnderdeel(double behaaldeModules) {
+    public void verhoogBehaaldeModules(double behaaldeModules) throws StudentAdminException {
 
         Cpp cpp = (Cpp)getProgramma();
 
-        if(this.behaaldeModules + (int)behaaldeModules  <= cpp.getAantalModules()) {
-            this.behaaldeModules += (int) behaaldeModules;
-            return true;
+        if(this.behaaldeModules + (int)behaaldeModules  > cpp.getAantalModules()) {
+
+            throw new StudentAdminException("Aantal behaalde modules is groter dan deze CPP heeft");
+
         }
-        return false;
+
+        if (this.behaaldeModules + behaaldeModules < 0) {
+
+            throw new StudentAdminException("Aantal behaalde modules is kleiner dan 0");
+
+        }
+
+
+        this.behaaldeModules += (int) behaaldeModules;
+
     }
 
 
@@ -79,7 +86,6 @@ public class Scholer extends Student{
     @Override
     public String toString() {
 
-        Cpp cpp = (Cpp)getProgramma();
         return "Regulier: \nNaam: " + getNaam() + "\nbehaalde modules: " +  behaaldeModules + "Programma: " + getProgramma();
     }
 }

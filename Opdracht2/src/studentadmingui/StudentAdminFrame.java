@@ -1,7 +1,7 @@
 package studentadmingui;
 
-import studentenadmin.StudentenAdmin;
-import studentenadmin.StudentenAdminException;
+import studentadmin.StudentAdmin;
+import studentadmin.StudentAdminException;
 
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -16,10 +16,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class StudentAdminFrame extends JFrame {
 
-    private StudentenAdmin studentenAdmin = null;
+    private StudentAdmin studentenAdmin = null;
 
     private static final long serialVersionUID = 1L;
     private JPanel jContentPane = null;
@@ -70,24 +72,11 @@ public class StudentAdminFrame extends JFrame {
     }
 
     /**
-     * Verbindt de gui met de domeinlaag, vult de applicatie met data en initialiseert veld-waardes van de gui.
+     * Verbindt de gui met de domeinlaag en initialiseert veld-waardes van de gui.
      */
     private void mijnInitialize() {
 
-        studentenAdmin = new StudentenAdmin();
-
-        try {
-            studentenAdmin.voegProgrammaToe("studentenadmin.Opleiding","Wiskunde", 160);
-            studentenAdmin.voegProgrammaToe("studentenadmin.Opleiding","Informatica", 120);
-            studentenAdmin.voegProgrammaToe("studentenadmin.Cpp", "CPP Softwarearchitect", 4);
-            studentenAdmin.voegProgrammaToe("studentenadmin.Cpp", "CPP Java", 6);
-            studentenAdmin.voegProgrammaToe("studentenadmin.Cpp", "CPP System Ontwikkelaar", 3);
-
-        } catch (StudentenAdminException studaminEx) {
-
-            infoLabel.setText(studaminEx.getMessage());
-
-        }
+        studentenAdmin = new StudentAdmin();
 
     /*
     toevoegen van items aan keuzes voor reguliere studenten
@@ -127,15 +116,19 @@ public class StudentAdminFrame extends JFrame {
 
             String opleidingNaam = opleidingComboBox.getSelectedItem().toString();
 
-            studentenAdmin.voegStudentToe("studentenadmin.Regulier", studentNaam, opleidingNaam);
+            studentenAdmin.voegRegulierToe(studentNaam, opleidingNaam);
 
             infoLabel.setText("Reguliere student met naam " + studentNaam + " is succesvol toegevoegd." );
 
-        } catch (StudentenAdminException adminEx) {
+        } catch (StudentAdminException adminEx) {
 
             infoLabel.setText(adminEx.getMessage());
 
-        } finally {
+        } catch (NullPointerException nullEx) {
+
+            infoLabel.setText("Opleiding veld is niet geselecteed");
+
+        } finally{
 
             studentTextField.setText("");
         }
@@ -153,13 +146,18 @@ public class StudentAdminFrame extends JFrame {
 
             String cppNaam = scholingComboBox.getSelectedItem().toString();
 
-            studentenAdmin.voegStudentToe("studentenadmin.Scholer", scholerNaam, cppNaam);
+            studentenAdmin.voegScholerToe(scholerNaam, cppNaam);
 
             infoLabel.setText("Scholer met naam " + scholerNaam + " is succesvol toegevoegd." );
 
-        } catch (StudentenAdminException studadminEx) {
+        } catch (StudentAdminException studadminEx) {
 
             infoLabel.setText(studadminEx.getMessage());
+
+        } catch (NullPointerException nullEx) {
+
+            infoLabel.setText("CPP veld is niet geselecteed");
+
 
         } finally {
 
@@ -181,7 +179,7 @@ public class StudentAdminFrame extends JFrame {
             String info = studentenAdmin.getStudentInfo(naam);
             studentInfoVeld.setText(info);
 
-        } catch (StudentenAdminException studadminEx){
+        } catch (StudentAdminException studadminEx){
 
             infoLabel.setText(studadminEx.getMessage());
 
@@ -195,27 +193,25 @@ public class StudentAdminFrame extends JFrame {
      */
     private void puntenVeldAction(){
 
-        String klassenNaam = "studentenadmin.Opleiding";
-
         String naam = bestaandeNaamVeld.getText();
 
         try {
 
             double d1 = Double.parseDouble(puntenVeld.getText());
 
-            studentenAdmin.verhoogBehaaldeProgrammaOnderdelen(naam, d1, klassenNaam);
+            studentenAdmin.verhoogAantalStudiepunten(naam, d1);
 
             String info = studentenAdmin.getStudentInfo(naam);
 
             studentInfoVeld.setText(info);
 
-        } catch (StudentenAdminException studentenAdminException){
+        } catch (StudentAdminException studentAdminException){
 
-            infoLabel.setText(studentenAdminException.getMessage());
+            infoLabel.setText(studentAdminException.getMessage());
 
         } catch (NumberFormatException numFormEx){
 
-            infoLabel.setText(numFormEx.getMessage());
+            infoLabel.setText("Input kan niet naar double overgezet worden");
         }
 
     }
@@ -226,14 +222,14 @@ public class StudentAdminFrame extends JFrame {
     private void moduleKnopAction(){
 
         String naam = bestaandeNaamVeld.getText();
-        String klassenNaam = "studentenadmin.Cpp";
+        String klassenNaam = "Cpp";
 
         try {
-            studentenAdmin.verhoogBehaaldeProgrammaOnderdelen(naam, 1.0, klassenNaam);
+            studentenAdmin.verhoogAantalModules(naam, 1.0);
             String info = studentenAdmin.getStudentInfo(naam);
             studentInfoVeld.setText(info);
 
-        } catch (StudentenAdminException studAdminEx){
+        } catch (StudentAdminException studAdminEx){
 
             infoLabel.setText(studAdminEx.getMessage());
         }
@@ -333,6 +329,12 @@ public class StudentAdminFrame extends JFrame {
             mijnTabbladenPanel.addTab("studentinfo", null, getStudentPanel(), null);
             mijnTabbladenPanel.addTab("alle studenten", null,
                     getAlleStudentenPanel(), null);
+            mijnTabbladenPanel.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    infoLabel.setText("");
+                }
+            });
         }
         return mijnTabbladenPanel;
     }
@@ -357,6 +359,7 @@ public class StudentAdminFrame extends JFrame {
             voegStudenttoePanel.add(studentLabel, null);
             voegStudenttoePanel.add(getStudentTextField(), null);
             voegStudenttoePanel.add(getStudentButton(), null);
+
         }
         return voegStudenttoePanel;
     }
