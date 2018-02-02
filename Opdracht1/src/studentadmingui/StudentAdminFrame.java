@@ -119,20 +119,10 @@ public class StudentAdminFrame extends JFrame {
 
             infoLabel.setText("Reguliere student met naam " + studentNaam + " is succesvol toegevoegd." );
 
-            /*
-        } catch (StudentAdminException adminEx) {
-
-            infoLabel.setText(adminEx.getMessage());
-
-        } catch (NullPointerException nullEx) {
-
-            infoLabel.setText("Opleiding veld is niet geselecteed");
-
-        } finally{
-
             studentTextField.setText("");
-        }
-        */
+            opleidingComboBox.setSelectedIndex(-1);
+
+
     }
 
     /**
@@ -140,33 +130,16 @@ public class StudentAdminFrame extends JFrame {
      */
     private void scholerButtonAction(){
 
+        String scholerNaam = scholerTextField.getText();
 
+        String cppNaam = scholingComboBox.getSelectedItem().toString();
 
+        studentenAdmin.voegScholerToe(scholerNaam, cppNaam);
 
-            String scholerNaam = scholerTextField.getText();
+        infoLabel.setText("Scholer met naam " + scholerNaam + " is succesvol toegevoegd." );
 
-            String cppNaam = scholingComboBox.getSelectedItem().toString();
-
-            studentenAdmin.voegScholerToe(scholerNaam, cppNaam);
-
-            infoLabel.setText("Scholer met naam " + scholerNaam + " is succesvol toegevoegd." );
-
-            /*
-        } catch (StudentAdminException studadminEx) {
-
-            infoLabel.setText(studadminEx.getMessage());
-
-        } catch (NullPointerException nullEx) {
-
-            infoLabel.setText("CPP veld is niet geselecteed");
-
-
-        } finally {
-
-            scholerTextField.setText("");
-        }
-*/
-
+        scholerTextField.setText("");
+        scholingComboBox.setSelectedIndex(-1);
     }
 
 
@@ -178,6 +151,7 @@ public class StudentAdminFrame extends JFrame {
         String naam = bestaandeNaamVeld.getText();
 
             String info = studentenAdmin.getStudentInfo(naam);
+
             studentInfoVeld.setText(info);
 
     }
@@ -308,6 +282,15 @@ public class StudentAdminFrame extends JFrame {
                 @Override
                 public void stateChanged(ChangeEvent e) {
                     infoLabel.setText("");
+                    studentInfoVeld.setText("");
+                    puntenVeld.setText("");
+                    opleidingComboBox.setSelectedIndex(-1);
+                    scholingComboBox.setSelectedIndex(-1);
+                    studentTextField.setText("");
+                    scholerTextField.setText("");
+                    studentInfoVeld.setText("");
+                    bestaandeNaamVeld.setText("");
+                    uitvoerGebied.setText("");
                 }
             });
         }
