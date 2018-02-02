@@ -3,7 +3,7 @@ package studentadmin;
 /**
  * Beheert professional program gerelateerde informatie
  */
-public class Cpp extends Programma {
+class Cpp extends Programma {
 
     private int aantalModules = 0;
 
@@ -15,7 +15,7 @@ public class Cpp extends Programma {
      *
      * @param aantalModules Het aantal modules die behaalt moeten worden om voor het programma te slagen.
      */
-    public Cpp(String naam, int aantalModules){
+     Cpp(String naam, int aantalModules){
 
         super(naam);
         this.aantalModules = aantalModules;
@@ -23,7 +23,7 @@ public class Cpp extends Programma {
     }
 
 
-    public int getAantalModules() {
+    int getAantalModules() {
 
         return aantalModules;
     }

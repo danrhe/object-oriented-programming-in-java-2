@@ -3,7 +3,7 @@ package studentadmin;
 /**
  * Beheert de gegevens van een scholer.
  */
-public class Scholer extends Student{
+class Scholer extends Student{
 
     private int behaaldeModules = 0;
 
@@ -14,24 +14,22 @@ public class Scholer extends Student{
      *
      * @param cpp Professional program.
      */
-    public Scholer (String naam, Programma cpp) {
+    Scholer (String naam, Programma cpp) {
         super(naam, cpp);
     }
 
 
     /**
-     * Past het aantal behaalde modules van de scholer aan mits dit getal niet groter is dan het aantal modules van het
-     * cpp programma of kleiner dan 0.
-     *
-     * @param behaaldeModules Het nieuwe aantal behaalde modules.
+     * Verhoogt het aantal behaalde modules van de scholer met een, mits dit getal niet groter is dan het aantal modules
+     * van het cpp programma of kleiner dan 0.
      */
-    public void verhoogBehaaldeModules(int behaaldeModules) {
+    void verhoogBehaaldeModulesMetEen() {
 
         Cpp cpp = (Cpp)getProgramma();
 
-        boolean teVeel = this.behaaldeModules + behaaldeModules  > cpp.getAantalModules();
+        boolean teVeel = this.behaaldeModules + 1  > cpp.getAantalModules();
 
-        boolean kleinerNull = this.behaaldeModules + behaaldeModules < 0;
+        boolean kleinerNull = this.behaaldeModules + 1 < 0;
 
         if (!(kleinerNull) && !(teVeel)){
             this.behaaldeModules += behaaldeModules;
@@ -41,11 +39,11 @@ public class Scholer extends Student{
 
 
     /**
-     * Bepaalt de status van het CPP voor een scholier.
+     * Bepaalt de status van het CPP voor een scholer.
      *
      * @return De status.
      */
-    public boolean isGeslaagd(){
+    boolean isGeslaagd(){
         Cpp cpp = (Cpp)getProgramma();
         return behaaldeModules >= cpp.getAantalModules();
     }
@@ -55,7 +53,7 @@ public class Scholer extends Student{
      *
      * @return Informatie over de scholer
      */
-    public String getStudentInfo(){
+    String getStudentInfo(){
 
         String status = "geslaagd";
         if (!isGeslaagd()){

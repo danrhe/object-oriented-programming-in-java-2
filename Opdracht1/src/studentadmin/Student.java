@@ -3,7 +3,7 @@ package studentadmin;
 /**
  * Beheert de gegevens van een student.
  */
-public abstract class Student {
+abstract class Student {
 
     private String naam = null;
     private Programma programma = null;
@@ -15,7 +15,7 @@ public abstract class Student {
      *
      * @param programma Het programma waarvoor de student ingeschreven staat.
      */
-    public Student(String naam, Programma programma) {
+    Student(String naam, Programma programma) {
 
         String opgeschoondeString = schoonStringOp(naam);
 
@@ -31,23 +31,23 @@ public abstract class Student {
      *
      * @return Status van het studie programma van een student.
      */
-    public abstract boolean isGeslaagd();
+    abstract boolean isGeslaagd();
 
     /**
      * Geeft de gegevens van een student weer inclusief studiestatus.
      *
      * @return Status van het studie programma van een student.
      */
-    public abstract String getStudentInfo() ;
+    abstract String getStudentInfo() ;
 
 
-    public String getNaam() {
+    String getNaam() {
 
         return naam;
     }
 
 
-    public Programma getProgramma() {
+    Programma getProgramma() {
 
         return programma;
     }

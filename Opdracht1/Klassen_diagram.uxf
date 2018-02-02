@@ -23,7 +23,7 @@
 + voegRegulierToe(String studentNaam): void
 + voegScholerToe(String studentNaam): void
 + verhoogAantalStudiepunten(String naam, double behaaldePunten)
-+ verhoogAantalModules(String naam, double behaaldeModules)
++ verhoogAantalModulesMetEen(String naam)
 + getStudentInfo(String naam): String
 + getAlleStudentenInfo(): String
 + getAlleCppNamen(): List&lt;String&gt;
@@ -43,11 +43,11 @@
 --
 - naam: String
 --
-+ Student(String naam, Programma programma)
-/+ isGeslaagd(): boolean/
-/+ getStudentInfo(): String/
-+ getNaam(): String
-+ getProgramma(): Programma
+# Student(String naam, Programma programma)
+/# isGeslaagd(): boolean/
+/# getStudentInfo(): String/
+# getNaam(): String
+# getProgramma(): Programma
 + toString(): String
 - stringIsMinimaalTweeLetters(String string): boolean
 - schoonStringOp(String string): String</panel_attributes>
@@ -65,12 +65,10 @@
 --
 - behaaldeModules: int
 --
-+ Scholer(String naam, Programma cpp)
-+ getBehaaldeModules(): int
-+ verhoogBehaaldeModules(double 
-  behaaldeModules) boolean
-+ isGeslaagd(): boolean
-+ getStudentInfo(): String
+# Scholer(String naam, Programma cpp)
+# verhoogBehaaldeModulesMetEen(): void
+# isGeslaagd(): boolean
+# getStudentInfo(): String
 + toString(): String
 
 </panel_attributes>
@@ -88,11 +86,11 @@
 --
 - behaaldeStudiepunten: double
 --
-+ Regulier(String naam, Programma opleiding)
-+ verhoogBehaaldeStudiePunten(double 
+# Regulier(String naam, Programma opleiding)
+# verhoogBehaaldeStudiePunten(double 
   behaaldeStudiepunten): void
-+ isGeslaagd(): boolean
-+ getStudentInfo(): String
+# isGeslaagd(): boolean
+# getStudentInfo(): String
 + toString(): String
 </panel_attributes>
     <additional_attributes/>
@@ -131,8 +129,8 @@
 --
 - aantalStudiepunten: double
 --
-+ Opleiding (String naam, double aantalStudiepunten)
-+ getAantalStudiepunten(): double
+# Opleiding (String naam, double aantalStudiepunten)
+# getAantalStudiepunten(): double
 + toString(): String
 
 
@@ -168,8 +166,8 @@ m2=*
 --
 - aantalModules: int
 --
-+ Cpp(String naam, int aantalModules)
-+ getAantalModules(): int
+# Cpp(String naam, int aantalModules)
+# getAantalModules(): int
 + toString(): String</panel_attributes>
     <additional_attributes/>
   </element>
@@ -185,8 +183,8 @@ m2=*
 --
 - naam: String
 --
-+ Programma (String naam)
-+ getNaam(): String
+# Programma (String naam)
+# getNaam(): String
 + toString(): String
 
 </panel_attributes>

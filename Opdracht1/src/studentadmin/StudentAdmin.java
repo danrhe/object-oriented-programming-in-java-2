@@ -118,7 +118,7 @@ public class StudentAdmin {
      *
      * @param studiepunten Het aantal studiepunten.
      */
-    public void voegOpleidingToe(String naam, double studiepunten) {
+    private void voegOpleidingToe(String naam, double studiepunten) {
 
         if (!(programmaBestaatAl(naam))){
             programmaLijst.add(new Opleiding(naam, studiepunten));
@@ -132,7 +132,7 @@ public class StudentAdmin {
      *
      * @param modules Het aantal studiepunten.
      */
-    public void voegCppToe(String naam, int modules) {
+    private void voegCppToe(String naam, int modules) {
 
         if (!(programmaBestaatAl(naam))){
             programmaLijst.add(new Cpp(naam, modules));
@@ -193,15 +193,13 @@ public class StudentAdmin {
      * Verhoogt het aantal modules.
      *
      * @param naam Naam van de student.
-     *
-     * @param behaaldeModules Aantal modules die een student gehaald heeft.
      */
-    public void verhoogAantalModules(String naam, int behaaldeModules) {
+    public void verhoogAantalModulesMetEen(String naam) {
 
         Student student = getBestaandeStudent(naam);
 
         if (student instanceof Scholer){
-            ((Scholer)student).verhoogBehaaldeModules(behaaldeModules);
+            ((Scholer)student).verhoogBehaaldeModulesMetEen();
         }
     }
 

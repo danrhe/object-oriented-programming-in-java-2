@@ -205,7 +205,7 @@ public class StudentAdminFrame extends JFrame {
     private void moduleKnopAction(){
 
         String naam = bestaandeNaamVeld.getText();
-        studentenAdmin.verhoogAantalModules(naam, 1);
+        studentenAdmin.verhoogAantalModulesMetEen(naam);
         String info = studentenAdmin.getStudentInfo(naam);
         studentInfoVeld.setText(info);
 
