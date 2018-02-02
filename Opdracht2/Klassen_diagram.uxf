@@ -23,7 +23,7 @@
 + voegRegulierToe(String studentNaam): void
 + voegScholerToe(String studentNaam): void
 + verhoogAantalStudiepunten(String naam, double behaaldePunten)
-+ verhoogAantalModules(String naam, double behaaldeModules)
++ verhoogAantalModulesMetEen(String naam)
 + getStudentInfo(String naam): String
 + getAlleStudentenInfo(): String
 + getAlleCppNamen(): List&lt;String&gt;
@@ -67,8 +67,7 @@
 --
 + Scholer(String naam, Programma cpp)
 + getBehaaldeModules(): int
-+ verhoogBehaaldeModules(double 
-  behaaldeModules) boolean
++ verhoogBehaaldeModulesMetEen(): void
 + isGeslaagd(): boolean
 + getStudentInfo(): String
 + toString(): String

@@ -214,16 +214,14 @@ public class StudentAdmin {
     }
 
     /**
-     * Verhoogt het aantal modules.
+     * Verhoogt het aantal modules met een.
      *
      * @param naam Naam van de student.
-     *
-     * @param behaaldeModules Aantal modules die een student gehaald heeft.
      *
      * @throws StudentAdminException Wordt gegooid als student onbekend of geen scholer is, of het aantal
      *         behaalde punten van de student negatief of groter dan het aantal punten van het CPP zou worden.
      */
-    public void verhoogAantalModules(String naam, int behaaldeModules) throws StudentAdminException {
+    public void verhoogAantalModulesMetEen(String naam) throws StudentAdminException {
 
         Student student = getBestaandeStudent(naam);
 
@@ -231,7 +229,7 @@ public class StudentAdmin {
             throw new StudentAdminException("Alleen scholers kunnen modules verhogen");
         }
 
-        ((Scholer)student).verhoogBehaaldeModules(behaaldeModules);
+        ((Scholer)student).verhoogBehaaldeModulesMetEen();
 
     }
 

@@ -225,7 +225,7 @@ public class StudentAdminFrame extends JFrame {
         String klassenNaam = "Cpp";
 
         try {
-            studentenAdmin.verhoogAantalModules(naam, 1);
+            studentenAdmin.verhoogAantalModulesMetEen(naam);
             String info = studentenAdmin.getStudentInfo(naam);
             studentInfoVeld.setText(info);
 

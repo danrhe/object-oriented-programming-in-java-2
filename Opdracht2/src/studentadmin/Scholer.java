@@ -25,31 +25,29 @@ public class Scholer extends Student{
 
 
     /**
-     * Past het aantal behaalde modules van de scholer aan mits dit getal niet groter is dan het aantal modules van het
-     * cpp programma.
-     *
-     * @param behaaldeModules Het nieuwe aantal behaalde modules.
+     * Verhoogt het aantal behaalde modules van de scholer met een mits dit getal niet groter is dan het aantal modules
+     * van het cpp programma.
      *
      * @throws StudentAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP of kleiner dan 0.
      */
-    public void verhoogBehaaldeModules(int behaaldeModules) throws StudentAdminException {
+    public void verhoogBehaaldeModulesMetEen() throws StudentAdminException {
 
         Cpp cpp = (Cpp)getProgramma();
 
-        if(this.behaaldeModules + behaaldeModules  > cpp.getAantalModules()) {
+        if(this.behaaldeModules + 1  > cpp.getAantalModules()) {
 
             throw new StudentAdminException("Aantal behaalde modules is groter dan deze CPP heeft");
 
         }
 
-        if (this.behaaldeModules + behaaldeModules < 0) {
+        if (this.behaaldeModules + 1 < 0) {
 
             throw new StudentAdminException("Aantal behaalde modules is kleiner dan 0");
 
         }
 
 
-        this.behaaldeModules += behaaldeModules;
+        this.behaaldeModules += 1;
 
     }
 
