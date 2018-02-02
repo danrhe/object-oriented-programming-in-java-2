@@ -5,21 +5,25 @@
     <id>UMLClass</id>
     <coordinates>
       <x>294</x>
-      <y>0</y>
+      <y>6</y>
       <w>360</w>
-      <h>150</h>
+      <h>180</h>
     </coordinates>
     <panel_attributes>StudentenAdmin
 --
 
 --
 + StudentenAdmin()
-- getStudent(String naam): Student
+- getBestaandeStudent(String naam): Student
+- studentBestaatAl(String naam): boolean
 - getProgramma(String naam): Programma
-+ getStudentKlassenNaam(String naam): String
-+ voegProgrammaToe(Programma programma): boolean
-+ voegStudentToe(Student student): boolean
-+ verhoogBehaaldeProgrammaOnderdelen(String naam, double behaald)
+- programmaBestaatAl(String naam): boolean
++ voegOpleidingToe(String naam, double studiepunten): void
++ voegCppToe(String naam, double modules): void
++ voegRegulierToe(String studentNaam): void
++ voegScholerToe(String studentNaam): void
++ verhoogAantalStudiepunten(String naam, double behaaldePunten)
++ verhoogAantalModulesMetEen(String naam)
 + getStudentInfo(String naam): String
 + getAlleStudentenInfo(): String
 + getAlleCppNamen(): List&lt;String&gt;
@@ -31,29 +35,29 @@
     <id>UMLClass</id>
     <coordinates>
       <x>588</x>
-      <y>192</y>
+      <y>198</y>
       <w>270</w>
-      <h>102</h>
+      <h>108</h>
     </coordinates>
     <panel_attributes>/Student/
 --
 - naam: String
 --
-+ Student(String naam, Programma programma)
-/+ verhoogBehaaldeProgrammaOnderdelen(double/
-/  hoeveelheid) : boolean/
-/+ isGeslaagd(): boolean/
-/+ getStudentInfo(): String/
-+ getNaam(): String
+# Student(String naam, Programma programma)
+/# isGeslaagd(): boolean/
+/# getStudentInfo(): String/
+# getNaam(): String
+# getProgramma(): Programma
 + toString(): String
-</panel_attributes>
+- stringIsMinimaalTweeLetters(String string): boolean
+- schoonStringOp(String string): String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>720</x>
-      <y>384</y>
+      <y>390</y>
       <w>204</w>
       <h>96</h>
     </coordinates>
@@ -61,12 +65,10 @@
 --
 - behaaldeModules: int
 --
-+ Scholer(String naam, Cpp cpp)
-+ getBehaaldeModules(): int
-+ verhoogBehaaldProgrammaOnderdeel(double 
-  behaaldeModules) boolean
-+ isGeslaagd(): boolean
-+ getStudentInfo(): String
+# Scholer(String naam, Programma cpp)
+# verhoogBehaaldeModulesMetEen(): void
+# isGeslaagd(): boolean
+# getStudentInfo(): String
 + toString(): String
 
 </panel_attributes>
@@ -76,7 +78,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>480</x>
-      <y>384</y>
+      <y>390</y>
       <w>228</w>
       <h>96</h>
     </coordinates>
@@ -84,12 +86,11 @@
 --
 - behaaldeStudiepunten: double
 --
-+ Regulier(String naam, Opleiding opleiding)
-+ getBehaaldeStudiepunten(): double
-+ verhoogBehaaldProgrammaOnderdeel(double 
-  behaaldeStudiepunten): boolean
-+ isGeslaagd(): boolean
-+ getStudentInfo(): String
+# Regulier(String naam, Programma opleiding)
+# verhoogBehaaldeStudiePunten(double 
+  behaaldeStudiepunten): void
+# isGeslaagd(): boolean
+# getStudentInfo(): String
 + toString(): String
 </panel_attributes>
     <additional_attributes/>
@@ -98,29 +99,29 @@
     <id>Relation</id>
     <coordinates>
       <x>600</x>
-      <y>288</y>
+      <y>300</y>
       <w>132</w>
-      <h>108</h>
+      <h>102</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>200.0;10.0;200.0;60.0;10.0;60.0;10.0;160.0</additional_attributes>
+    <additional_attributes>200.0;10.0;200.0;50.0;10.0;50.0;10.0;150.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>714</x>
-      <y>288</y>
+      <y>300</y>
       <w>120</w>
-      <h>108</h>
+      <h>102</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0;180.0;60.0;180.0;160.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;180.0;50.0;180.0;150.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>390</y>
+      <y>396</y>
       <w>228</w>
       <h>72</h>
     </coordinates>
@@ -128,8 +129,8 @@
 --
 - aantalStudiepunten: double
 --
-+ Opleiding (String naam, double aantalStudiepunten)
-+ getAantalStudiepunten(): double
+# Opleiding (String naam, double aantalStudiepunten)
+# getAantalStudiepunten(): double
 + toString(): String
 
 
@@ -141,7 +142,7 @@
     <id>Relation</id>
     <coordinates>
       <x>648</x>
-      <y>66</y>
+      <y>72</y>
       <w>84</w>
       <h>138</h>
     </coordinates>
@@ -157,7 +158,7 @@ m2=*
     <id>UMLClass</id>
     <coordinates>
       <x>234</x>
-      <y>390</y>
+      <y>396</y>
       <w>216</w>
       <h>72</h>
     </coordinates>
@@ -165,8 +166,8 @@ m2=*
 --
 - aantalModules: int
 --
-+ Cpp(String naam, int aantalModules)
-+ getAantalModules(): int
+# Cpp(String naam, int aantalModules)
+# getAantalModules(): int
 + toString(): String</panel_attributes>
     <additional_attributes/>
   </element>
@@ -174,7 +175,7 @@ m2=*
     <id>UMLClass</id>
     <coordinates>
       <x>156</x>
-      <y>192</y>
+      <y>198</y>
       <w>162</w>
       <h>72</h>
     </coordinates>
@@ -182,8 +183,9 @@ m2=*
 --
 - naam: String
 --
-+ Programma (String naam)
-+ getNaam(): String
+# Programma (String naam)
+# getNaam(): String
++ toString(): String
 
 </panel_attributes>
     <additional_attributes/>
@@ -192,7 +194,7 @@ m2=*
     <id>Relation</id>
     <coordinates>
       <x>228</x>
-      <y>72</y>
+      <y>78</y>
       <w>78</w>
       <h>132</h>
     </coordinates>
@@ -208,7 +210,7 @@ m2=*
     <id>Relation</id>
     <coordinates>
       <x>108</x>
-      <y>258</y>
+      <y>264</y>
       <w>138</w>
       <h>144</h>
     </coordinates>
@@ -219,7 +221,7 @@ m2=*
     <id>Relation</id>
     <coordinates>
       <x>228</x>
-      <y>258</y>
+      <y>264</y>
       <w>138</w>
       <h>144</h>
     </coordinates>
@@ -230,7 +232,7 @@ m2=*
     <id>Relation</id>
     <coordinates>
       <x>312</x>
-      <y>216</y>
+      <y>222</y>
       <w>288</w>
       <h>24</h>
     </coordinates>
@@ -238,5 +240,21 @@ m2=*
 m1=1
 m2=*</panel_attributes>
     <additional_attributes>10.0;10.0;460.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>564</x>
+      <y>498</y>
+      <w>228</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Bedrijfregels:
+- Instanties van klasse Regulier mogen alleen geassocieerd 
+worden met instanties van Opleiding.  
+- Instanties van klasse Scholer mogen alleen geassocieerd 
+worden met instanties van Cpp..  
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
