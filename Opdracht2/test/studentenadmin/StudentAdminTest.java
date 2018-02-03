@@ -5,8 +5,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import studentadmin.Cpp;
-import studentadmin.Opleiding;
 import studentadmin.StudentAdmin;
 import studentadmin.StudentAdminException;
 
@@ -15,15 +13,11 @@ public class StudentAdminTest {
 
 
     private StudentAdmin studentAdmin = null;
-    private Cpp cpp = null;
-    private Opleiding opleiding = null;
 
     @Before
     public void setUp() throws Exception {
 
         studentAdmin = new StudentAdmin();
-        cpp = new Cpp("Test_cpp", 6);
-        opleiding = new Opleiding("Test_Opleiding", 120.0);
 
         try {
             studentAdmin.voegRegulierToe("Tobias","Wiskunde");
@@ -40,8 +34,6 @@ public class StudentAdminTest {
     @After
     public void afterTestMethod() {
         studentAdmin = null;
-        cpp = null;
-        opleiding = null;
 
     }
 
@@ -172,7 +164,7 @@ public class StudentAdminTest {
         thrown.expectMessage("Student met naam " + naam + " is niet in geregistreerd");
 
 
-        studentAdmin.verhoogAantalModules(naam,4);
+        studentAdmin.verhoogAantalModulesMetEen(naam);
     }
 
     @Test
@@ -180,23 +172,22 @@ public class StudentAdminTest {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Aantal behaalde modules is groter dan deze CPP heeft");
 
-        studentAdmin.verhoogAantalModules("Hans",7);
+        studentAdmin.verhoogAantalModulesMetEen("Hans");
+        studentAdmin.verhoogAantalModulesMetEen("Hans");
+        studentAdmin.verhoogAantalModulesMetEen("Hans");
+        studentAdmin.verhoogAantalModulesMetEen("Hans");
+        studentAdmin.verhoogAantalModulesMetEen("Hans");
+        studentAdmin.verhoogAantalModulesMetEen("Hans");
+        studentAdmin.verhoogAantalModulesMetEen("Hans");
     }
 
-    @Test
-    public void testVerhoogAantalModulesKleinerNull() throws StudentAdminException {
-        thrown.expect(StudentAdminException.class);
-        thrown.expectMessage("Aantal behaalde modules is kleiner dan 0");
-
-        studentAdmin.verhoogAantalModules("Hans",-1);
-    }
 
     @Test
     public void testVerhoogAantalModulesRegulier() throws StudentAdminException {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Alleen scholers kunnen modules verhogen");
 
-        studentAdmin.verhoogAantalModules("Tobias",4);
+        studentAdmin.verhoogAantalModulesMetEen("Tobias");
     }
 
     @Test

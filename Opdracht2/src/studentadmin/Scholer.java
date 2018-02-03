@@ -3,7 +3,7 @@ package studentadmin;
 /**
  * Beheert de gegevens van een scholer.
  */
-public class Scholer extends Student{
+class Scholer extends Student{
 
     private int behaaldeModules = 0;
 
@@ -16,7 +16,7 @@ public class Scholer extends Student{
      *
      * @throws StudentAdminException Wordt gegooid als programma geen instantie van de subklasse Cpp is
      */
-    public Scholer (String naam, Programma cpp) throws StudentAdminException {
+    Scholer (String naam, Programma cpp) throws StudentAdminException {
         super(naam, cpp);
         if (!(cpp instanceof Cpp)){
             throw new StudentAdminException("Scholers mogen alleen met Cpp\'s gekoppeld worden");
@@ -25,31 +25,29 @@ public class Scholer extends Student{
 
 
     /**
-     * Past het aantal behaalde modules van de scholer aan mits dit getal niet groter is dan het aantal modules van het
-     * cpp programma.
-     *
-     * @param behaaldeModules Het nieuwe aantal behaalde modules.
+     * Verhoogt het aantal behaalde modules van de scholer met een mits dit getal niet groter is dan het aantal modules
+     * van het cpp programma.
      *
      * @throws StudentAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP of kleiner dan 0.
      */
-    public void verhoogBehaaldeModules(double behaaldeModules) throws StudentAdminException {
+    void verhoogBehaaldeModulesMetEen() throws StudentAdminException {
 
         Cpp cpp = (Cpp)getProgramma();
 
-        if(this.behaaldeModules + (int)behaaldeModules  > cpp.getAantalModules()) {
+        if(this.behaaldeModules + 1  > cpp.getAantalModules()) {
 
             throw new StudentAdminException("Aantal behaalde modules is groter dan deze CPP heeft");
 
         }
 
-        if (this.behaaldeModules + behaaldeModules < 0) {
+        if (this.behaaldeModules + 1 < 0) {
 
             throw new StudentAdminException("Aantal behaalde modules is kleiner dan 0");
 
         }
 
 
-        this.behaaldeModules += (int) behaaldeModules;
+        this.behaaldeModules += 1;
 
     }
 
@@ -59,7 +57,7 @@ public class Scholer extends Student{
      *
      * @return De status.
      */
-    public boolean isGeslaagd(){
+    boolean isGeslaagd(){
         Cpp cpp = (Cpp)getProgramma();
         return behaaldeModules >= cpp.getAantalModules();
     }
@@ -69,7 +67,7 @@ public class Scholer extends Student{
      *
      * @return Informatie over de scholer
      */
-    public String getStudentInfo(){
+    String getStudentInfo(){
 
         String status = "geslaagd";
         if (!isGeslaagd()){

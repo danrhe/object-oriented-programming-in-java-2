@@ -222,10 +222,9 @@ public class StudentAdminFrame extends JFrame {
     private void moduleKnopAction(){
 
         String naam = bestaandeNaamVeld.getText();
-        String klassenNaam = "Cpp";
 
         try {
-            studentenAdmin.verhoogAantalModules(naam, 1.0);
+            studentenAdmin.verhoogAantalModulesMetEen(naam);
             String info = studentenAdmin.getStudentInfo(naam);
             studentInfoVeld.setText(info);
 
@@ -332,7 +331,18 @@ public class StudentAdminFrame extends JFrame {
             mijnTabbladenPanel.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
+
                     infoLabel.setText("");
+                    infoLabel.setText("");
+                    studentInfoVeld.setText("");
+                    puntenVeld.setText("");
+                    opleidingComboBox.setSelectedIndex(-1);
+                    scholingComboBox.setSelectedIndex(-1);
+                    studentTextField.setText("");
+                    scholerTextField.setText("");
+                    studentInfoVeld.setText("");
+                    bestaandeNaamVeld.setText("");
+                    uitvoerGebied.setText("");
                 }
             });
         }
