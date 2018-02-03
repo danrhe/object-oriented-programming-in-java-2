@@ -1,9 +1,9 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert de gegevens van een scholer.
  */
-public class Scholer extends Student{
+class Scholer extends Student{
 
     private int behaaldeModules = 0;
 
@@ -13,44 +13,32 @@ public class Scholer extends Student{
      * @param naam Naam van de student.
      *
      * @param cpp Professional program.
-     *
      */
-    public Scholer (String naam, Cpp cpp){
-
+    Scholer (String naam, Programma cpp) {
         super(naam, cpp);
     }
 
-    public int getBehaaldeModules() {
-
-        return behaaldeModules;
-    }
 
     /**
-     * Past het aantal behaalde modules van de scholer aan mits dit getal niet groter is dan het aantal modules van het
-     * cpp programma.
-     *
-     * @param behaaldeModules Het nieuwe aantal behaalde modules.
-     *
-     * @return Success van de operatie.
+     * Verhoogt het aantal behaalde modules van de scholer met een, mits dit getal niet groter is dan het aantal modules
+     * van het cpp programma.
      */
-    public boolean verhoogBehaaldProgrammaOnderdeel(double behaaldeModules) {
+    void verhoogBehaaldeModulesMetEen() {
 
         Cpp cpp = (Cpp)getProgramma();
 
-        if(this.behaaldeModules + (int)behaaldeModules  <= cpp.getAantalModules()) {
-            this.behaaldeModules += (int) behaaldeModules;
-            return true;
+        if (!(this.behaaldeModules + 1  > cpp.getAantalModules())){
+            this.behaaldeModules += behaaldeModules;
         }
-        return false;
     }
 
 
     /**
-     * Bepaalt de status van het CPP voor een scholier.
+     * Bepaalt de status van het CPP voor een scholer.
      *
      * @return De status.
      */
-    public boolean isGeslaagd(){
+    boolean isGeslaagd(){
         Cpp cpp = (Cpp)getProgramma();
         return behaaldeModules >= cpp.getAantalModules();
     }
@@ -60,7 +48,7 @@ public class Scholer extends Student{
      *
      * @return Informatie over de scholer
      */
-    public String getStudentInfo(){
+    String getStudentInfo(){
 
         String status = "geslaagd";
         if (!isGeslaagd()){
@@ -77,7 +65,6 @@ public class Scholer extends Student{
     @Override
     public String toString() {
 
-        Cpp cpp = (Cpp)getProgramma();
         return "Regulier: \nNaam: " + getNaam() + "\nbehaalde modules: " +  behaaldeModules + "Programma: " + getProgramma();
     }
 }

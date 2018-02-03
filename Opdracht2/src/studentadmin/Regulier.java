@@ -1,9 +1,9 @@
-package studentenadmin;
+package studentadmin;
 
 /**
  * Beheert de gegevens van een regulier ingeschreven student.
  */
-public class Regulier extends Student{
+class Regulier extends Student{
 
     private double behaaldeStudiepunten = 0.0;
 
@@ -11,33 +11,48 @@ public class Regulier extends Student{
      * Default constructor.
      *
      * @param naam naam van de student.
+     *
      * @param opleiding opleiding die de student volgt.
+     *
+     * @throws StudentAdminException Wordt gegooid als programma geen instantie van de subklasse opleiding is
+     *
      */
-    public Regulier(String naam, Opleiding opleiding) {
+    Regulier(String naam, Programma opleiding) throws StudentAdminException {
         super(naam, opleiding);
 
+        if (!(opleiding instanceof Opleiding)){
+
+            throw new StudentAdminException("Reguliere studenten mogen alleen met opleidingen gekoppeld worden");
+        }
     }
 
-    public double getBehaaldeStudiepunten() {
-
-        return behaaldeStudiepunten;
-    }
 
     /**
-     * Past het aantaal behaalde studiepunten aan mits het aantal studiepunten niet groter is dan het aantal
+     * Past het aantaal behaalde studiepunten aan. mits het aantal studiepunten niet groter is dan het aantal
      * studiepunten van de opleiding.
      *
      * @param behaaldeStudiepunten Het nieuwe aantal behaalde studiepunten.
+     *
+     * @throws StudentAdminException Wordt gegooid als het aantal behaalde studiepunten groter wordt dan aantal studiepunten
+     * van de opleiding.
      */
-    public boolean verhoogBehaaldProgrammaOnderdeel(double behaaldeStudiepunten) {
+    void verhoogBehaaldeStudiepunten(double behaaldeStudiepunten) throws StudentAdminException {
 
         Opleiding opleiding = (Opleiding)getProgramma();
 
-        if (this.behaaldeStudiepunten + behaaldeStudiepunten <= opleiding.getAantalStudiepunten()) {
-            this.behaaldeStudiepunten = this.behaaldeStudiepunten + behaaldeStudiepunten;
-            return true;
+        if (this.behaaldeStudiepunten + behaaldeStudiepunten > opleiding.getAantalStudiepunten()) {
+
+            throw new StudentAdminException("Aantal behaalde studiepunten is groter dan het aantal studiepunten van de opleiding");
+
         }
-        return false;
+
+        if (this.behaaldeStudiepunten + behaaldeStudiepunten < 0) {
+
+            throw new StudentAdminException("Aantal behaalde studiepunten is kleiner dan 0");
+
+        }
+
+        this.behaaldeStudiepunten = this.behaaldeStudiepunten + behaaldeStudiepunten;
 
     }
 
@@ -48,7 +63,7 @@ public class Regulier extends Student{
      *
      * @return Status van de opleiding.
      */
-    public boolean isGeslaagd(){
+    boolean isGeslaagd(){
 
         Opleiding opleiding = (Opleiding)getProgramma();
 
@@ -61,7 +76,7 @@ public class Regulier extends Student{
      *
      * @return Informatie over de scholer
      */
-    public String getStudentInfo(){
+    String getStudentInfo(){
 
         String status = "geslaagd";
         if (!isGeslaagd()){
