@@ -3,7 +3,7 @@ package studentadmin;
 /**
  * Beheert de gegevens van een regulier ingeschreven student.
  */
-public class Regulier extends Student{
+class Regulier extends Student{
 
     private double behaaldeStudiepunten = 0.0;
 
@@ -17,7 +17,7 @@ public class Regulier extends Student{
      * @throws StudentAdminException Wordt gegooid als programma geen instantie van de subklasse opleiding is
      *
      */
-    public Regulier(String naam, Programma opleiding) throws StudentAdminException {
+    Regulier(String naam, Programma opleiding) throws StudentAdminException {
         super(naam, opleiding);
 
         if (!(opleiding instanceof Opleiding)){
@@ -36,7 +36,7 @@ public class Regulier extends Student{
      * @throws StudentAdminException Wordt gegooid als het aantal behaalde studiepunten groter wordt dan aantal studiepunten
      * van de opleiding.
      */
-    public void verhoogBehaaldeStudiepunten(double behaaldeStudiepunten) throws StudentAdminException {
+    void verhoogBehaaldeStudiepunten(double behaaldeStudiepunten) throws StudentAdminException {
 
         Opleiding opleiding = (Opleiding)getProgramma();
 
@@ -63,7 +63,7 @@ public class Regulier extends Student{
      *
      * @return Status van de opleiding.
      */
-    public boolean isGeslaagd(){
+    boolean isGeslaagd(){
 
         Opleiding opleiding = (Opleiding)getProgramma();
 
@@ -76,7 +76,7 @@ public class Regulier extends Student{
      *
      * @return Informatie over de scholer
      */
-    public String getStudentInfo(){
+    String getStudentInfo(){
 
         String status = "geslaagd";
         if (!isGeslaagd()){

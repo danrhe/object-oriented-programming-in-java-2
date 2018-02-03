@@ -3,7 +3,7 @@ package studentadmin;
 /**
  * Beheert de gegevens van een scholer.
  */
-public class Scholer extends Student{
+class Scholer extends Student{
 
     private int behaaldeModules = 0;
 
@@ -16,7 +16,7 @@ public class Scholer extends Student{
      *
      * @throws StudentAdminException Wordt gegooid als programma geen instantie van de subklasse Cpp is
      */
-    public Scholer (String naam, Programma cpp) throws StudentAdminException {
+    Scholer (String naam, Programma cpp) throws StudentAdminException {
         super(naam, cpp);
         if (!(cpp instanceof Cpp)){
             throw new StudentAdminException("Scholers mogen alleen met Cpp\'s gekoppeld worden");
@@ -30,7 +30,7 @@ public class Scholer extends Student{
      *
      * @throws StudentAdminException Wordt gegooid als het behaaldeModules groter wordt dan aantal modules van CPP of kleiner dan 0.
      */
-    public void verhoogBehaaldeModulesMetEen() throws StudentAdminException {
+    void verhoogBehaaldeModulesMetEen() throws StudentAdminException {
 
         Cpp cpp = (Cpp)getProgramma();
 
@@ -57,7 +57,7 @@ public class Scholer extends Student{
      *
      * @return De status.
      */
-    public boolean isGeslaagd(){
+    boolean isGeslaagd(){
         Cpp cpp = (Cpp)getProgramma();
         return behaaldeModules >= cpp.getAantalModules();
     }
@@ -67,7 +67,7 @@ public class Scholer extends Student{
      *
      * @return Informatie over de scholer
      */
-    public String getStudentInfo(){
+    String getStudentInfo(){
 
         String status = "geslaagd";
         if (!isGeslaagd()){
