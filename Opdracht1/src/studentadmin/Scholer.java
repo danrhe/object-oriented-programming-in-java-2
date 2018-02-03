@@ -21,20 +21,15 @@ class Scholer extends Student{
 
     /**
      * Verhoogt het aantal behaalde modules van de scholer met een, mits dit getal niet groter is dan het aantal modules
-     * van het cpp programma of kleiner dan 0.
+     * van het cpp programma.
      */
     void verhoogBehaaldeModulesMetEen() {
 
         Cpp cpp = (Cpp)getProgramma();
 
-        boolean teVeel = this.behaaldeModules + 1  > cpp.getAantalModules();
-
-        boolean kleinerNull = this.behaaldeModules + 1 < 0;
-
-        if (!(kleinerNull) && !(teVeel)){
+        if (!(this.behaaldeModules + 1  > cpp.getAantalModules())){
             this.behaaldeModules += behaaldeModules;
         }
-
     }
 
 
