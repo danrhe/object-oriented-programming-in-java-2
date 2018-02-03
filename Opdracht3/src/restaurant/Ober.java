@@ -6,7 +6,7 @@ import static java.lang.Thread.sleep;
 /**
  * Vertegenwoordigt de ober die maaltijden naar de tafels brengt.
  */
-public class Ober implements Runnable {
+class Ober implements Runnable {
 
     /**
      * Tijd die nodig is om naar de tafel te lopen.
@@ -26,6 +26,8 @@ public class Ober implements Runnable {
     private String naam = null;
     private UitgifteBalie uitgiftebalie = null;
 
+    private volatile boolean stoppen = false;
+
     /**
      * Default constructor.
      *
@@ -33,7 +35,7 @@ public class Ober implements Runnable {
      *
      * @param uitgiftebalie De uitgiftebalie waar de ober het eten ophaalt.
      */
-    public Ober(String naam, UitgifteBalie uitgiftebalie) {
+    Ober(String naam, UitgifteBalie uitgiftebalie) {
 
         this.naam = naam;
         this.uitgiftebalie = uitgiftebalie;
@@ -42,11 +44,11 @@ public class Ober implements Runnable {
 
 
     /**
-     * De serverprocedure.
+     * Simuleert de serveerprocedure.
      *
      * @param maaltijd Maaltijd die de ober serveert.
      *
-     * @throws InterruptedException
+     * @throws InterruptedException Wordt gegooid als draad onverwacht onderbroken wordt.
      */
     private void serveer(Maaltijd maaltijd) throws InterruptedException{
 
@@ -60,15 +62,19 @@ public class Ober implements Runnable {
         sleep(maaltijd.getTafelnr() * LOOPTIJD);
     }
 
+    void stopOber(){
+        stoppen = true;
+    }
+
 
     /**
-     * Routine die het starten van een hulpdraad doorloopt.
+     * Routine die bij het starten van een hulpdraad doorlopen wordt.
      */
     public void run() {
-        long nu = System.currentTimeMillis();
-        long eindtijd = System.currentTimeMillis() + Restaurant.SIMULATIETIJD;
 
-        while (nu <= eindtijd) {
+        stoppen = false;
+
+        while (!stoppen) {
             try {
 
                 Maaltijd maaltijd = uitgiftebalie.pakMaaltijd();
@@ -82,11 +88,11 @@ public class Ober implements Runnable {
                 }
 
             } catch (InterruptedException interrupted) {
-
+                System.out.println("Draad werd onverwacht onderbroken");
             }
 
         }
-        System.out.println("Ober " + naam + " is klaar vandaag.");
+        System.out.println("Ober " + naam + " is klaar voor vandaag.");
     }
 }
 

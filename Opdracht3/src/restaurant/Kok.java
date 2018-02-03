@@ -6,9 +6,9 @@ import java.util.*;
 /**
  * Klasse die verantwoordelijk is voor het bereiden van maaltijden
  */
-public class Kok extends Thread{
+class Kok extends Thread{
 
-    public static final int BEREIDINGSTIJD = 4000;
+    private static final int BEREIDINGSTIJD = 4000;
 
 
     /**
@@ -28,28 +28,30 @@ public class Kok extends Thread{
     /**
      * Naam van de kok.
      */
-    String naam = null;
-    UitgifteBalie uitgifteBalie = null;
+    private String naam = null;
+
+    private UitgifteBalie uitgifteBalie = null;
+
+    private volatile boolean stoppen = false;
 
     /**
+     * Constructor van kok.
      *
      * @param naam Naam van de kok.
      * @param uitgifteBalie De balie waar de kok het eten naar toe brengt om het verder te verdelen.
      */
-    public Kok(String naam, UitgifteBalie uitgifteBalie) {
+    Kok(String naam, UitgifteBalie uitgifteBalie) {
         this.naam = naam;
         this.uitgifteBalie = uitgifteBalie;
     }
 
-    public String getNaam() {
-        return naam;
-    }
 
     /**
      * Keuze voor gerecht een tafel en bereiding van de maaltijd
-     * @throws InterruptedException
+     *
+     * @throws InterruptedException Wordt gegooid als draad onverwachts beeindigd wordt door applicatie.
      */
-    public void kook() throws InterruptedException{
+    private void kook() throws InterruptedException{
 
         Maaltijd maaltijd = new Maaltijd(kiesOmschrijving(), kiesTafel());
         System.out.println( "Kok " + naam +  " begint met koken van " + maaltijd.toString());
@@ -66,10 +68,9 @@ public class Kok extends Thread{
      * @return Het tafelnummer.
      */
     private int kiesTafel(){
-        Random random = new Random();
-        int tafelNr = random.nextInt(Restaurant.AANTALTAFELS) + 1;
 
-        return tafelNr;
+        Random random = new Random();
+        return random.nextInt(Restaurant.AANTALTAFELS) + 1;
     }
 
     /**
@@ -86,23 +87,24 @@ public class Kok extends Thread{
     }
 
 
+    void stopKok(){
+        stoppen = true;
+    }
+
     @Override
     public void run() {
-        long nu = System.currentTimeMillis();
-        long eindtijd = System.currentTimeMillis() + Restaurant.SIMULATIETIJD;
 
-        while (nu <= eindtijd) {
+        stoppen = false;
+        while (!stoppen) {
             try {
-
-                nu = System.currentTimeMillis();
                 kook();
-
-            } catch (InterruptedException interrupted){
-
+            } catch (InterruptedException interrupted) {
+                System.out.println("Draad werd onverwacht onderbroken");
             }
-
         }
 
-        System.out.println("Kok " + naam + " is klaar vandaag.");
+        System.out.println("Kok " + naam + " is klaar voor vandaag.");
     }
+
 }
+

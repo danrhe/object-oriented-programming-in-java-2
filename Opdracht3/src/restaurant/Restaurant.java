@@ -9,19 +9,23 @@ public class Restaurant {
     /**
      * Het aantal tafels van het restaurant.
      */
-    public static final int AANTALTAFELS = 10;
+    static final int AANTALTAFELS = 10;
 
     /**
      * De lengte van de simulatie.
      */
-    public static final int SIMULATIETIJD = 12000;
+    static final int SIMULATIETIJD = 12000;
 
+
+    /**
+     * De plek waar maaltijden naar toe worden gebracht en op worden gehaald
+     */
     private UitgifteBalie uitgifteBalie = null;
 
     /**
      * De default constructor.
      */
-    public Restaurant() {
+    private Restaurant() {
         uitgifteBalie = new UitgifteBalie();
 
     }
@@ -29,7 +33,7 @@ public class Restaurant {
 
     /**
      * Start de hoofddraad van de simulatie.
-     * @param args
+     * @param args mogelijke parameter voor applicatie start
      */
     public static void main(String[] args){
         Restaurant restaurant = new Restaurant();
@@ -43,18 +47,35 @@ public class Restaurant {
         Thread hulpdraadOber3 = new Thread(ober3);
 
         long nu = System.currentTimeMillis();
-        long eindtijd = System.currentTimeMillis() + Restaurant.SIMULATIETIJD;
+        long eindtijd = System.currentTimeMillis() + SIMULATIETIJD;
+
+        kok1.start();
+        kok2.start();
+
+        hulpdraadOber1.start();
+        hulpdraadOber2.start();
+        hulpdraadOber3.start();
+
 
         while (nu <= eindtijd) {
+            try {
+                Thread.sleep(1000);
+                nu = nu + 1000;
 
-            kok1.start();
-            kok2.start();
-            hulpdraadOber1.start();
-            hulpdraadOber2.start();
-            hulpdraadOber3.start();
+            } catch (InterruptedException e){
+
+                System.out.println ("Hoofddraad is onverwacht beeindigd.");
+            }
         }
+        kok1.stopKok();
+        kok2.stopKok();
 
-        System.out.println("Hoofddraad is klaar.");
+        ober1.stopOber();
+        ober2.stopOber();
+        ober3.stopOber();
+
+
+        System.out.println("Het restaurant gaat sluiten.");
 
 
     }

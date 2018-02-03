@@ -3,31 +3,36 @@ package restaurant;
 /**
  * Representeert een maaltijd in het restaurant
  */
-public class Maaltijd {
+class Maaltijd {
     private String omschrijving = null;
     private int tafelnr = -1;
 
 
     /**
      * Default constructor.
-     * @param omschrijving
-     * @param tafelnr
+     *
+     * @param omschrijving Omschrijving van wat de maaltijd bevat.
+     *
+     * @param tafelnr Tafelnummer van het gerecht.
      */
-    public Maaltijd(String omschrijving, int tafelnr) {
+     Maaltijd(String omschrijving, int tafelnr) {
         this.omschrijving = omschrijving;
         this.tafelnr = tafelnr;
     }
 
-    public String getOmschrijving() {
-        return omschrijving;
+    String getOmschrijving() {
+
+         return omschrijving;
     }
 
-    public int getTafelnr() {
-        return tafelnr;
+    int getTafelnr() {
+
+         return tafelnr;
     }
 
     @Override
     public String toString() {
-        return omschrijving + " voor tafel nummer " + tafelnr;
+
+         return omschrijving + " voor tafel nummer " + tafelnr;
     }
 }

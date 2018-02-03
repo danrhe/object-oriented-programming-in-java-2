@@ -1,3 +1,5 @@
+package restaurant;
+
 import org.junit.Before;
 import org.junit.Test;
 import restaurant.Maaltijd;
@@ -15,10 +17,10 @@ public class UitgifteBalieTest {
     @Before public void setup(){
 
 
-    maaltijd1 = new Maaltijd("Pizza", 1);
-    maaltijd2 = new Maaltijd("Soep", 2);
-    uitgifteBalie.plaatsMaaltijd(maaltijd1);
-    uitgifteBalie.plaatsMaaltijd(maaltijd2);
+        maaltijd1 = new Maaltijd("Pizza", 1);
+        maaltijd2 = new Maaltijd("Soep", 2);
+        uitgifteBalie.plaatsMaaltijd(maaltijd1);
+        uitgifteBalie.plaatsMaaltijd(maaltijd2);
 
     }
 

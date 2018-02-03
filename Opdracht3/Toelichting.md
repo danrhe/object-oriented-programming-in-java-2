@@ -1,0 +1,3 @@
+Synchronisatieproblemen:
+
+In deze applicatie maken meerdere draden gebruik van de stapel met maaltijden, die in de Uitgiftebalie-klasse geplaatst is. Omdat de klasse van deze stapel (*ArrayList*) natief niet atomair is, moeten alle functie die veranderingen aanbrengen aan deze *ArrayList* gesynchroniseerd worden. Binnen deze applicatie zijn dit met name de methoden ***pakMaaltijd*** en ***plaatsMaaltijd***.
