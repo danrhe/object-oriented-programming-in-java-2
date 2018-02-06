@@ -27,8 +27,8 @@ class Scholer extends Student{
 
         Cpp cpp = (Cpp)getProgramma();
 
-        if (!(this.behaaldeModules + 1  > cpp.getAantalModules())){
-            this.behaaldeModules += behaaldeModules;
+        if (this.behaaldeModules + 1  <= cpp.getAantalModules()){
+            this.behaaldeModules += 1;
         }
     }
 
