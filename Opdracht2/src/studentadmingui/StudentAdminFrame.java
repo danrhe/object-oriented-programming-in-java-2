@@ -116,9 +116,9 @@ public class StudentAdminFrame extends JFrame {
 
             String opleidingNaam = opleidingComboBox.getSelectedItem().toString();
 
-            studentenAdmin.voegRegulierToe(studentNaam, opleidingNaam);
+            String opgeschoondeNaam = studentenAdmin.voegRegulierToe(studentNaam, opleidingNaam);
 
-            infoLabel.setText("Reguliere student met naam " + studentNaam + " is succesvol toegevoegd." );
+            infoLabel.setText("Reguliere student met naam " + opgeschoondeNaam + " is succesvol toegevoegd." );
 
         } catch (StudentAdminException adminEx) {
 
@@ -146,9 +146,9 @@ public class StudentAdminFrame extends JFrame {
 
             String cppNaam = scholingComboBox.getSelectedItem().toString();
 
-            studentenAdmin.voegScholerToe(scholerNaam, cppNaam);
+            String opgeschoondeNaam = studentenAdmin.voegScholerToe(scholerNaam, cppNaam);
 
-            infoLabel.setText("Scholer met naam " + scholerNaam + " is succesvol toegevoegd." );
+            infoLabel.setText("Scholer met naam " + opgeschoondeNaam + " is succesvol toegevoegd." );
 
         } catch (StudentAdminException studadminEx) {
 

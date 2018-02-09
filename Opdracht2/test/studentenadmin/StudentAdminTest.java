@@ -11,17 +11,16 @@ import studentadmin.StudentAdminException;
 
 public class StudentAdminTest {
 
-
     private StudentAdmin studentAdmin = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         studentAdmin = new StudentAdmin();
 
         try {
-            studentAdmin.voegRegulierToe("Tobias","Wiskunde");
-            studentAdmin.voegScholerToe("Hans","CPP Java");
+            studentAdmin.voegRegulierToe("Tobias", "Wiskunde");
+            studentAdmin.voegScholerToe("Hans", "CPP Java");
         } catch (StudentAdminException studaminEx) {
 
             System.out.println(studaminEx.getMessage());
@@ -42,7 +41,8 @@ public class StudentAdminTest {
     public ExpectedException thrown = ExpectedException.none();
 
 
-    @Test public void testVoegOpleidingToeBestaatAl() throws StudentAdminException {
+    @Test
+    public void testVoegOpleidingToeBestaatAl() throws StudentAdminException {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Programma met deze naam bestaat al");
 
@@ -50,7 +50,8 @@ public class StudentAdminTest {
     }
 
 
-    @Test public void testVoegCppToeBestaatAl() throws StudentAdminException {
+    @Test
+    public void testVoegCppToeBestaatAl() throws StudentAdminException {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Programma met deze naam bestaat al");
 
@@ -64,7 +65,7 @@ public class StudentAdminTest {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Student met dezelfde naam staat al geregistreerd");
 
-        studentAdmin.voegRegulierToe("Tobias","Informatica");
+        studentAdmin.voegRegulierToe("Tobias", "Informatica");
 
     }
 
@@ -87,7 +88,7 @@ public class StudentAdminTest {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Reguliere studenten mogen alleen met opleidingen gekoppeld worden");
 
-        studentAdmin.voegRegulierToe("Daniel","CPP Java");
+        studentAdmin.voegRegulierToe("Daniel", "CPP Java");
 
     }
 
@@ -98,7 +99,7 @@ public class StudentAdminTest {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Student met dezelfde naam staat al geregistreerd");
 
-        studentAdmin.voegScholerToe("Hans","CPP System Ontwikkelaar");
+        studentAdmin.voegScholerToe("Hans", "CPP System Ontwikkelaar");
 
     }
 
@@ -120,7 +121,7 @@ public class StudentAdminTest {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Scholers mogen alleen met Cpp\'s gekoppeld worden");
 
-        studentAdmin.voegScholerToe("Kasper","Informatica");
+        studentAdmin.voegScholerToe("Kasper", "Informatica");
 
     }
 
@@ -131,7 +132,7 @@ public class StudentAdminTest {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Student met naam " + naam + " is niet in geregistreerd");
 
-        studentAdmin.verhoogAantalStudiepunten(naam,44.0);
+        studentAdmin.verhoogAantalStudiepunten(naam, 44.0);
     }
 
     @Test
@@ -139,22 +140,24 @@ public class StudentAdminTest {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Aantal behaalde studiepunten is groter dan het aantal studiepunten van de opleiding");
 
-        studentAdmin.verhoogAantalStudiepunten("Tobias",244.0);
+        studentAdmin.verhoogAantalStudiepunten("Tobias", 244.0);
     }
+
     @Test
     public void testVerhoogAantalStudiepuntenKleinerNull() throws StudentAdminException {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Aantal behaalde studiepunten is kleiner dan 0");
 
-        studentAdmin.verhoogAantalStudiepunten("Tobias",-1.0);
+        studentAdmin.verhoogAantalStudiepunten("Tobias", -1.0);
     }
+
     @Test
 
     public void testVerhoogAantalStudiepuntenScholer() throws StudentAdminException {
         thrown.expect(StudentAdminException.class);
         thrown.expectMessage("Alleen reguliere studenten kunnen studiepunten verhogen");
 
-        studentAdmin.verhoogAantalStudiepunten("Hans",-1.0);
+        studentAdmin.verhoogAantalStudiepunten("Hans", -1.0);
     }
 
     @Test
@@ -199,7 +202,6 @@ public class StudentAdminTest {
 
         studentAdmin.getStudentInfo(naam);
     }
-
 
 
 }

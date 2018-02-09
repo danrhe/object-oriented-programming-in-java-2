@@ -106,14 +106,15 @@ abstract class Student {
 
         int teller = 0;
         for (char c : chars){
-            if(Character.isAlphabetic(c)){
+            if(Character.isLetter(c)){
 
                 goedeChars[teller] = c;
                 teller ++;
             }
         }
 
-        return (String.valueOf(goedeChars));
+
+        return (new String(goedeChars, 0, teller));
 
     }
 

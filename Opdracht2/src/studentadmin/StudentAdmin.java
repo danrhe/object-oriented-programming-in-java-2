@@ -152,22 +152,28 @@ public class StudentAdmin {
     }
 
 
-
     /**
      * Voegt een student toe aan de lijst van studentenLijst.
      *
-     * @param studentNaam De naam van een nieuwe student.
-     *
+     * @param studentNaam   De naam van een nieuwe student.
      * @param opleidingNaam De naam van de opleiding.
+     *
+     * @return opgeschoonde naam van nieuwe Scholer.
      *
      * @throws StudentAdminException Als student met de naam al geregistreerd is of het programma geen instantie van Opleiding is.
      */
-    public void voegRegulierToe(String studentNaam, String opleidingNaam) throws StudentAdminException {
+    public String voegRegulierToe(String studentNaam, String opleidingNaam) throws StudentAdminException {
 
-        if (studentBestaatAl(studentNaam)){
+        Student newRegulier = new Regulier(studentNaam, getBestaandProgramma(opleidingNaam));
+        String opgeschoondeNaam = newRegulier.getNaam();
+
+        if (studentBestaatAl(opgeschoondeNaam)) {
             throw new StudentAdminException("Student met dezelfde naam staat al geregistreerd");
         }
-        studentenLijst.add(new Regulier(studentNaam, getBestaandProgramma(opleidingNaam)));
+
+        studentenLijst.add(newRegulier);
+
+        return opgeschoondeNaam;
     }
 
 
@@ -178,15 +184,21 @@ public class StudentAdmin {
      *
      * @param cppNaam De naam van de cpp.
      *
+     * @return opgeschoonde naam van nieuwe scholer.
+     *
      * @throws StudentAdminException Als student met de naam al geregistreerd is of het programma geen instantie van Cpp is.
      */
-    public void voegScholerToe(String scholerNaam, String cppNaam) throws StudentAdminException {
+    public String voegScholerToe(String scholerNaam, String cppNaam) throws StudentAdminException {
 
-        if (studentBestaatAl(scholerNaam)){
+        Student newScholer = new Scholer(scholerNaam, getBestaandProgramma(cppNaam));
+
+        String opgeschoondeNaam = newScholer.getNaam();
+        if (studentBestaatAl(opgeschoondeNaam)){
             throw new StudentAdminException("Student met dezelfde naam staat al geregistreerd");
         }
 
-        studentenLijst.add(new Scholer(scholerNaam, getBestaandProgramma(cppNaam)));
+        studentenLijst.add(newScholer);
+        return opgeschoondeNaam;
     }
 
 
