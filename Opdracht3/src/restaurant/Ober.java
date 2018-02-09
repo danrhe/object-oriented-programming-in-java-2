@@ -24,7 +24,7 @@ class Ober implements Runnable {
     private static final int WACHTTIJD = 1000;
 
     private String naam = null;
-    
+
     private UitgifteBalie uitgiftebalie = null;
 
     private volatile boolean stoppen = false;
