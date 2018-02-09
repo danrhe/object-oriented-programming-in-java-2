@@ -11,19 +11,20 @@ class Ober implements Runnable {
     /**
      * Tijd die nodig is om naar de tafel te lopen.
      */
-    private final int LOOPTIJD = 1000;
+    private static final int LOOPTIJD = 1000;
 
     /**
      * Tijd die de ober nodig heeft om een maaltijd te serveren.
      */
-    private final int SERVEERTIJD = 1500;
+    private static final int SERVEERTIJD = 1500;
 
     /**
      * Tijd die de ober wacht voordat die weer kijkt of een maaltijd klaar is.
      */
-    private final int WACHTTIJD = 1000;
+    private static final int WACHTTIJD = 1000;
 
     private String naam = null;
+    
     private UitgifteBalie uitgiftebalie = null;
 
     private volatile boolean stoppen = false;
