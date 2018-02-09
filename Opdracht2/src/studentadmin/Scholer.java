@@ -35,17 +35,8 @@ class Scholer extends Student{
         Cpp cpp = (Cpp)getProgramma();
 
         if(this.behaaldeModules + 1  > cpp.getAantalModules()) {
-
             throw new StudentAdminException("Aantal behaalde modules is groter dan deze CPP heeft");
-
         }
-
-        if (this.behaaldeModules + 1 < 0) {
-
-            throw new StudentAdminException("Aantal behaalde modules is kleiner dan 0");
-
-        }
-
 
         this.behaaldeModules += 1;
 

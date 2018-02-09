@@ -53,9 +53,7 @@ public class StudentAdmin {
         for (Student student : studentenLijst){
 
             if(student.getNaam().equals(naam)){
-
                 return student;
-
             }
         }
 
