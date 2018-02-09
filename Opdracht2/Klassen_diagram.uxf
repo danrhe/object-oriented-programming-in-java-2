@@ -20,8 +20,8 @@
 - programmaBestaatAl(String naam): boolean
 + voegOpleidingToe(String naam, double studiepunten): void
 + voegCppToe(String naam, double modules): void
-+ voegRegulierToe(String studentNaam): void
-+ voegScholerToe(String studentNaam): void
++ voegRegulierToe(String studentNaam): String opgeschoondeNaam
++ voegScholerToe(String studentNaam): String opgeschoondeNaam
 + verhoogAantalStudiepunten(String naam, double behaaldePunten)
 + verhoogAantalModulesMetEen(String naam)
 + getStudentInfo(String naam): String
