@@ -19,10 +19,10 @@ public class Theater {
    * Creeert een theater.
    * @param naam theaternaam
    */
-  public Theater(String naam) {
+  public Theater(String naam) throws TheaterException{
     this.naam = naam;
-    Klantbeheer.init();
-    Voorstellingbeheer.init();
+    Connectiebeheer.openDB();
+
   }
 
   /**
@@ -37,7 +37,7 @@ public class Theater {
    * Geeft een lijst van data waarop voorstellingen zijn gepland.
    * @return lijst met data.
    */
-  public ArrayList<GregorianCalendar> geefVoorstellingsData() {
+  public ArrayList<GregorianCalendar> geefVoorstellingsData() throws TheaterException{
     return Voorstellingbeheer.geefVoorstellingsData();
   }
   
@@ -45,7 +45,7 @@ public class Theater {
    * Wisselt de huidige voorstelling naar voorstelling met gegeven datum.
    * @param datum datum van gevraagde voorstelling
    */
-  public void wisselVoorstelling(GregorianCalendar datum) {
+  public void wisselVoorstelling(GregorianCalendar datum) throws TheaterException {
     huidigeVoorstelling = Voorstellingbeheer.geefVoorstelling(datum);
   }
 

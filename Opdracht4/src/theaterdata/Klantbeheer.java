@@ -1,5 +1,9 @@
 package theaterdata;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import theater.Klant;
 
@@ -10,12 +14,33 @@ import theater.Klant;
 public class Klantbeheer {  
   private static int hoogsteKlantnummer = 0;
   private static ArrayList<Klant> klanten = new ArrayList<Klant>();
+  private static PreparedStatement pSelect = null;
 
   /**
-   * Initialiseert de klanten. Hier hoeft nu nog niets te gebeuren.
+   * Initialiseert de klanten.
    */
-  public static void init() {    
-  }
+  public static void init(Connection con) throws TheaterException{
+
+    String sql = "SELECT klantnummer, naam, telefoon FROM klant";
+    try {
+      pSelect = con.prepareStatement(sql);
+      ResultSet res = pSelect.executeQuery(sql);
+      while (res.next()){
+        int klantnummer = res.getInt("klantnummer");
+        String naam = res.getString("naam");
+        String telefoon = res.getString("telefoon");
+
+        klanten.add(new Klant(klantnummer, naam, telefoon));
+        getVolgendKlantNummer();
+
+      }
+
+
+
+    } catch (SQLException e){
+      throw new TheaterException("Fout bij het uitvoeren van de SELECT klant query");
+    }
+   }
   
   /**
    * Genereert het volgende beschikbare klantnummer.

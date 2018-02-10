@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 
 import theater.Theater;
 import theater.Voorstelling;
+import theaterdata.TheaterException;
 
 /**
  * De klasse TheaterFrame is de grafische interface van het theater. Dit frame
@@ -39,7 +40,7 @@ import theater.Voorstelling;
  * De klasse ZaalPanel toont de zaalbezetting van de geselecteerde voorstelling.
  * Een zaalPanel bevat rij- en stoelnummers, plus voor elke plaats in de zaal
  * een plaatsPanel. <br>
- * De klasse PlaatsPanel toont één plaats voor de geselecteerde voorstelling
+ * De klasse PlaatsPanel toont ï¿½ï¿½n plaats voor de geselecteerde voorstelling
  * 
  * @author Open Universiteit
  */
@@ -78,13 +79,18 @@ public class TheaterFrame extends JFrame {
    * Vult de voorstellingsKeuze en selecteert de eerste voorstelling.
    */
   private void mijnInit() {
-    theater = new Theater("Theater de Schouwburg");
-    setTitle(theater.getNaam());
-    ArrayList<GregorianCalendar> data = theater.geefVoorstellingsData();
-    for (GregorianCalendar datum : data) {
-      voorstellingsKeuze.addItem(fmt.format(datum.getTime()));
+    try {
+      theater = new Theater("Theater de Schouwburg");
+      setTitle(theater.getNaam());
+      ArrayList<GregorianCalendar> data = theater.geefVoorstellingsData();
+      for (GregorianCalendar datum : data) {
+        voorstellingsKeuze.addItem(fmt.format(datum.getTime()));
+      }
+      voorstellingsKeuze.setSelectedIndex(0);
+    } catch (TheaterException e){
+
+      System.out.println(e.getMessage());
     }
-    voorstellingsKeuze.setSelectedIndex(0);
   }
 
   /**
@@ -98,10 +104,14 @@ public class TheaterFrame extends JFrame {
       GregorianCalendar datum = new GregorianCalendar();
       try {
         datum.setTime(fmt.parse(sdatum));
+      theater.wisselVoorstelling(datum);
       } catch (ParseException exc) {
         // Exception afhandelen
+      } catch (TheaterException tEx){
+
+        System.out.println(tEx.getMessage());
       }
-      theater.wisselVoorstelling(datum);
+
 
       // Maak een nieuwe interface voor deze voorstelling
       Voorstelling voorstelling = theater.getHuidigeVoorstelling();

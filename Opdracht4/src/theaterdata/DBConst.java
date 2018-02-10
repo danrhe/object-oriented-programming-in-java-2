@@ -6,7 +6,7 @@ package theaterdata;
  */
 public class DBConst {
   protected static final String DRIVERNAAM = "com.mysql.jdbc.Driver";
-  protected static final String URL = "jdbc:mysql://localhost/theater";
+  protected static final String URL = "jdbc:mysql://localhost:8889/theater";
   protected static final String GEBRUIKERSNAAM = "cppjava";
-  protected static final String WACHTWOORD = "theater"; 
+  protected static final String WACHTWOORD = "theater";
 }
