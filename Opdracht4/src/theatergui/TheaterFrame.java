@@ -83,13 +83,16 @@ public class TheaterFrame extends JFrame {
       theater = new Theater("Theater de Schouwburg");
       setTitle(theater.getNaam());
       ArrayList<GregorianCalendar> data = theater.geefVoorstellingsData();
+
       for (GregorianCalendar datum : data) {
         voorstellingsKeuze.addItem(fmt.format(datum.getTime()));
       }
+
       voorstellingsKeuze.setSelectedIndex(0);
+
     } catch (TheaterException e){
 
-      System.out.println(e.getMessage());
+      foutLabel.setText(e.getMessage());
     }
   }
 
@@ -102,16 +105,18 @@ public class TheaterFrame extends JFrame {
     if (e.getStateChange() == ItemEvent.SELECTED) {
       String sdatum = (String) voorstellingsKeuze.getSelectedItem();
       GregorianCalendar datum = new GregorianCalendar();
+
       try {
         datum.setTime(fmt.parse(sdatum));
-      theater.wisselVoorstelling(datum);
-      } catch (ParseException exc) {
-        // Exception afhandelen
+        theater.wisselVoorstelling(datum);
+        foutLabel.setText("");
+
+      } catch (ParseException parseEx) {
+        foutLabel.setText("Fout bij het omzetten van de datum. Verwacht wordt invoer in de vorm van dd-MM-yyyy");
+
       } catch (TheaterException tEx){
-
-        System.out.println(tEx.getMessage());
+        foutLabel.setText(tEx.getMessage());
       }
-
 
       // Maak een nieuwe interface voor deze voorstelling
       Voorstelling voorstelling = theater.getHuidigeVoorstelling();
@@ -134,8 +139,11 @@ public class TheaterFrame extends JFrame {
   private void plaatsKnopAction() {
     String naam = naamVeld.getText();
     String telefoon = telefoonVeld.getText();
-    theater.plaatsKlant(naam, telefoon);
-
+    try {
+      theater.plaatsKlant(naam, telefoon);
+    } catch (TheaterException ex){
+      System.out.println(ex.getMessage());
+    }
     // maak de velden leeg
     naamVeld.setText("");
     telefoonVeld.setText("");

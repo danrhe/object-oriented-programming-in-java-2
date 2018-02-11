@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import theater.Klant;
 
 /**
@@ -12,33 +11,30 @@ import theater.Klant;
  * Deze klasse moet gewijzigd worden zodat ipv ArrayList database gebruikt wordt.
  */
 public class Klantbeheer {  
-  private static int hoogsteKlantnummer = 0;
-  private static ArrayList<Klant> klanten = new ArrayList<Klant>();
-  private static PreparedStatement pSelect = null;
+
+  private static PreparedStatement pGetMax = null;
+  private static PreparedStatement pZoekKlant = null;
+  private static PreparedStatement pInsertKlant = null;
 
   /**
    * Initialiseert de klanten.
    */
   public static void init(Connection con) throws TheaterException{
-
-    String sql = "SELECT klantnummer, naam, telefoon FROM klant";
+    String sql;
     try {
-      pSelect = con.prepareStatement(sql);
-      ResultSet res = pSelect.executeQuery(sql);
-      while (res.next()){
-        int klantnummer = res.getInt("klantnummer");
-        String naam = res.getString("naam");
-        String telefoon = res.getString("telefoon");
 
-        klanten.add(new Klant(klantnummer, naam, telefoon));
-        getVolgendKlantNummer();
+      sql = "SELECT klantnummer, naam, telefoon FROM klant WHERE naam = ? AND telefoon = ?";
+      pZoekKlant = con.prepareStatement(sql);
 
-      }
+      sql = "SELECT MAX(klantnummer) FROM klant";
+      pGetMax = con.prepareStatement(sql);
 
+      sql = "INSERT INTO klant (klantnummer, naam, telefoon)  VALUES (?,?,?)";
+      pInsertKlant = con.prepareStatement(sql);
 
 
     } catch (SQLException e){
-      throw new TheaterException("Fout bij het uitvoeren van de SELECT klant query");
+      throw new TheaterException("Fout bij het voorbereiden van de klantbeheer query");
     }
    }
   
@@ -46,8 +42,22 @@ public class Klantbeheer {
    * Genereert het volgende beschikbare klantnummer.
    * @return nieuw klantnummer
    */
-  public static int getVolgendKlantNummer() {
-    return hoogsteKlantnummer++;
+  public static int getVolgendKlantNummer() throws TheaterException{
+
+    int hoogsteKlantnummer = 0;
+
+    try {
+      ResultSet res = pGetMax.executeQuery();
+      while (res.next()){
+        hoogsteKlantnummer = res.getInt(1);
+      }
+
+    } catch (SQLException e){
+      throw new TheaterException("Fout bij het ophalen van het hoogste klantnummer");
+    }
+    hoogsteKlantnummer++;
+
+    return hoogsteKlantnummer;
   }
   
   /**
@@ -58,7 +68,7 @@ public class Klantbeheer {
    * @param telefoon  telefoonnummer van de klant
    * @return  een klant me de ingevoerde naam en telefoon.
    */
-  public static Klant geefKlant(String naam, String telefoon) {
+  public static Klant geefKlant(String naam, String telefoon) throws TheaterException{
     Klant klant = zoekKlant(naam, telefoon);
     if (klant == null) {
       klant = nieuweKlant(naam, telefoon);
@@ -72,13 +82,25 @@ public class Klantbeheer {
    * @param telefoon telefoonnummer van te zoeken klant
    * @return de klant of null wanneer klant niet is gevonden
    */
-  private static Klant zoekKlant(String naam, String telefoon) {
-    for (Klant k : klanten) {
-      if (k.getNaam().equals(naam) && k.getTelefoon().equals(telefoon)) {
-        return k;
+  private static Klant zoekKlant(String naam, String telefoon) throws TheaterException {
+
+    try {
+      pZoekKlant.setString(1, naam);
+      pZoekKlant.setString(2, telefoon);
+      ResultSet res = pZoekKlant.executeQuery();
+      while (res.next()) {
+        int klantnummer = res.getInt("klantnummer");
+        String sqlNaam = res.getString("naam");
+        String sqlTelefoon = res.getString("telefoon");
+
+        return new Klant(klantnummer, sqlNaam, sqlTelefoon);
       }
+      return null;
+
+      } catch (SQLException ex) {
+      throw new TheaterException("Fout bij het uitvoeren van de zoek klant query");
     }
-    return null;
+
   }
   
   /**
@@ -86,10 +108,20 @@ public class Klantbeheer {
    * @param naam  naam van de nieuwe klant
    * @param telefoon telefoonnummer van de nieuwe klant
    */
-  private static Klant nieuweKlant(String naam, String telefoon) {
+  private static Klant nieuweKlant(String naam, String telefoon) throws TheaterException{
     int knr = getVolgendKlantNummer();
     Klant k = new Klant(knr, naam, telefoon);
-    klanten.add(k);
+
+    try{
+      pInsertKlant.setInt(1, knr);
+      pInsertKlant.setString(2, naam);
+      pInsertKlant.setString(3, telefoon);
+      pInsertKlant.executeUpdate();
+    }
+    catch (SQLException e){
+      throw new TheaterException("Fout bij het aanmaken nieuwe klant");
+    }
+
     return k;
   }
  

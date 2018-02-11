@@ -63,7 +63,7 @@ public class Theater {
    * @param naam naam van klant
    * @param telefoon telefoonnummer van klant
    */
-  public void plaatsKlant(String naam, String telefoon) {
+  public void plaatsKlant(String naam, String telefoon) throws TheaterException{
     Klant klant = Klantbeheer.geefKlant(naam, telefoon);
     huidigeVoorstelling.plaatsKlant(klant);
   }
