@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,7 +96,24 @@ public class TheaterFrame extends JFrame {
 
       foutLabel.setText(e.getMessage());
     }
+
+    // add database close when frame is closed
+    addWindowListener(new WindowAdapter()
+    {
+      @Override
+      public void windowClosing(WindowEvent e)
+      {
+        try {
+          theater.sluitAf();
+        } catch (TheaterException theEx){
+          System.out.println(theEx.getMessage());
+        }
+        e.getWindow().dispose();
+      }
+    });
   }
+
+
 
   /**
    * Event handler voor het selecteren van een voorstelling. Er hoeft alleen
@@ -142,7 +161,7 @@ public class TheaterFrame extends JFrame {
     try {
       theater.plaatsKlant(naam, telefoon);
     } catch (TheaterException ex){
-      System.out.println(ex.getMessage());
+      foutLabel.setText(ex.getMessage());
     }
     // maak de velden leeg
     naamVeld.setText("");

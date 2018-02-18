@@ -1,5 +1,7 @@
 package theater;
 
+import theaterdata.TheaterException;
+import theaterdata.Voorstellingbeheer;
 import java.util.GregorianCalendar;
 
 /**
@@ -119,14 +121,20 @@ public class Voorstelling {
    * Plaatst de klant op alle gereserveerde plaatsen.
    * @param klant de klant
    */
-  public void plaatsKlant(Klant klant) {
-    for (int i = 1; i < plaatsen.length; i++) {
-      for (int j = 1; j < plaatsen[i].length; j++) {
-        plaatsen[i][j].plaatsKlant(klant);
+  public void plaatsKlant(Klant klant) throws TheaterException{
+
+    GregorianCalendar datumVoorstelling = getDatum();
+    for (int rij = 1; rij < plaatsen.length; rij++) {
+      for (int stoel = 1; stoel < plaatsen[rij].length; stoel++) {
+        boolean isGeplaatst = plaatsen[rij][stoel].plaatsKlant(klant);
+        if (isGeplaatst){
+          Voorstellingbeheer.slaBezettingOp(datumVoorstelling, rij, stoel, klant);
+        }
       }
     }
   }
-   
+
+
   /**
    * Geeft een plaats in de zaal
    * @param rijnummer  rijnummer van de plaats

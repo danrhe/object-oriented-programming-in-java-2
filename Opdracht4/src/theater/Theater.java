@@ -26,6 +26,15 @@ public class Theater {
   }
 
   /**
+   * Beeindigt de verbinding met de database.
+   *
+   */
+  public void sluitAf() throws TheaterException{
+    Connectiebeheer.closeDB();
+
+  }
+
+  /**
    * Geeft de naam van het theater.
    * @return naam van het theater
    */
@@ -67,6 +76,7 @@ public class Theater {
     Klant klant = Klantbeheer.geefKlant(naam, telefoon);
     huidigeVoorstelling.plaatsKlant(klant);
   }
+
 
   /**
    * Verandert de reserveringsstatus (VRIJ<=>GERESERVEERD) van een plaats

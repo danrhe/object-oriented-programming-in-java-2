@@ -12,7 +12,7 @@ import theater.Klant;
  */
 public class Klantbeheer {  
 
-  private static PreparedStatement pGetMax = null;
+  private static PreparedStatement pSelectMaxKlantnummer = null;
   private static PreparedStatement pZoekKlant = null;
   private static PreparedStatement pInsertKlant = null;
 
@@ -27,7 +27,7 @@ public class Klantbeheer {
       pZoekKlant = con.prepareStatement(sql);
 
       sql = "SELECT MAX(klantnummer) FROM klant";
-      pGetMax = con.prepareStatement(sql);
+      pSelectMaxKlantnummer = con.prepareStatement(sql);
 
       sql = "INSERT INTO klant (klantnummer, naam, telefoon)  VALUES (?,?,?)";
       pInsertKlant = con.prepareStatement(sql);
@@ -47,7 +47,7 @@ public class Klantbeheer {
     int hoogsteKlantnummer = 0;
 
     try {
-      ResultSet res = pGetMax.executeQuery();
+      ResultSet res = pSelectMaxKlantnummer.executeQuery();
       while (res.next()){
         hoogsteKlantnummer = res.getInt(1);
       }
@@ -88,13 +88,14 @@ public class Klantbeheer {
       pZoekKlant.setString(1, naam);
       pZoekKlant.setString(2, telefoon);
       ResultSet res = pZoekKlant.executeQuery();
-      while (res.next()) {
+
+      if(res.next()) {
         int klantnummer = res.getInt("klantnummer");
         String sqlNaam = res.getString("naam");
         String sqlTelefoon = res.getString("telefoon");
-
         return new Klant(klantnummer, sqlNaam, sqlTelefoon);
       }
+
       return null;
 
       } catch (SQLException ex) {
@@ -110,7 +111,7 @@ public class Klantbeheer {
    */
   private static Klant nieuweKlant(String naam, String telefoon) throws TheaterException{
     int knr = getVolgendKlantNummer();
-    Klant k = new Klant(knr, naam, telefoon);
+    Klant klant = new Klant(knr, naam, telefoon);
 
     try{
       pInsertKlant.setInt(1, knr);
@@ -122,7 +123,7 @@ public class Klantbeheer {
       throw new TheaterException("Fout bij het aanmaken nieuwe klant");
     }
 
-    return k;
+    return klant;
   }
  
 }

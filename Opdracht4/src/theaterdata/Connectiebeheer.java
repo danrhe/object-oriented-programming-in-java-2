@@ -1,6 +1,9 @@
 package theaterdata;
 
 
+import theater.Theater;
+import theatergui.TheaterFrame;
+
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -51,12 +54,13 @@ public class Connectiebeheer {
   /**
    * Sluit de connectie met de database
    */
-  public static void closeDB(){
+  public static void closeDB() throws TheaterException{
     if (con != null) {
       try {
         con.close();
+        System.out.println("Verbinding database is verbroken");
       } catch (SQLException sluitError) {
-
+        throw new TheaterException("Fout bij het verbreken van de verbinding");
       }
 
 

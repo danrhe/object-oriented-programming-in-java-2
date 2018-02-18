@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import theater.Klant;
 import theater.Voorstelling;
 
@@ -18,10 +18,13 @@ import theater.Voorstelling;
  */
 public class Voorstellingbeheer {
 
-  private static PreparedStatement pVoorDatum = null;
-  private static PreparedStatement pVoorNu = null;
-  private static PreparedStatement pBezetGet = null;
-  private static PreparedStatement pKlantGet = null;
+  private static PreparedStatement pGetVoorstellingDatum = null;
+  private static PreparedStatement pGetVoorstellingen = null;
+  private static PreparedStatement pGetBezetting = null;
+  private static PreparedStatement pGetKlant = null;
+  private static PreparedStatement pGetBezettingStoel = null;
+  private static PreparedStatement pInsertBezetting = null;
+  private static PreparedStatement pGetMaxResnummer = null;
 
   /**
    * Vult voorstellingbeheer met een aantal voorstellingen.
@@ -29,14 +32,20 @@ public class Voorstellingbeheer {
   public static void init(Connection con) throws TheaterException{
     String sql = null;
     try {
-      sql = "SELECT datum, naam FROM voorstelling where datum >NOW()";
-      pVoorNu = con.prepareStatement(sql);
-      sql = "SELECT datum, naam FROM voorstelling where datum = ?";
-      pVoorDatum = con.prepareStatement(sql);
-      sql = "SELECT voorstelling, rijnummer, stoelnummer, klant FROM bezetting where voorstelling = ?";
-      pBezetGet = con.prepareStatement(sql);
-      sql = "SELECT naam, telefoon FROM klant where klantnummer = ?";
-      pKlantGet = con.prepareStatement(sql);
+      sql = "SELECT datum, naam FROM voorstelling WHERE datum >NOW()";
+      pGetVoorstellingen = con.prepareStatement(sql);
+      sql = "SELECT datum, naam FROM voorstelling WHERE datum = ?";
+      pGetVoorstellingDatum = con.prepareStatement(sql);
+      sql = "SELECT voorstelling, rijnummer, stoelnummer, klant FROM bezetting WHERE voorstelling = ?";
+      pGetBezetting = con.prepareStatement(sql);
+      sql = "SELECT naam, telefoon FROM klant WHERE klantnummer = ?";
+      pGetKlant = con.prepareStatement(sql);
+      sql = "SELECT MAX(resnummer) FROM bezetting";
+      pGetMaxResnummer = con.prepareStatement(sql);
+      sql = "INSERT INTO bezetting (resnummer, voorstelling, rijnummer, stoelnummer, klant) VALUES (?, ?, ?, ?, ?)";
+      pInsertBezetting = con.prepareStatement(sql);
+      sql = "SELECT resnummer FROM bezetting WHERE voorstelling = ? AND rijnummer = ? AND stoelnummer = ?";
+      pGetBezettingStoel = con.prepareStatement(sql);
     } catch (SQLException e){
 
       throw new TheaterException("Fout bij het voorbereiden van voorstellingen queries");
@@ -44,13 +53,8 @@ public class Voorstellingbeheer {
 
   }
 
-  public static void slaBezettingOp() throws TheaterException{
-
-  }
-
   /**
-   * Levert alle data op waarop voorstellingen zijn (voor zover die data in de
-   * toekomst liggen).
+   * Levert alle data waarop voorstellingen zijn (voor zover die data in de toekomst liggen).
    *
    * @return lijst met data van voorstellingen
    */
@@ -59,14 +63,12 @@ public class Voorstellingbeheer {
     ArrayList<GregorianCalendar> data = new ArrayList<GregorianCalendar>();
 
     try {
-      ResultSet res = pVoorNu.executeQuery();
+      ResultSet res = pGetVoorstellingen.executeQuery();
+
       while(res.next()) {
-
         java.sql.Date sqlDatum = res.getDate("datum");
-
         GregorianCalendar datum = new GregorianCalendar();
         datum.setTimeInMillis(sqlDatum.getTime());
-
         data.add(datum);
       }
 
@@ -79,61 +81,148 @@ public class Voorstellingbeheer {
   }
 
   /**
-   * Zoekt een voorstelling op de gegeven datum.
+   * Slaat de bezetting van een stoel voor een bepaalde rij en voorstelling op in de database.
+   * Voorwaarde: De stoel van deze rij en voorstelling is niet al in de database opgenomen.
    *
-   * @param datum
-   * @return een voorstelling op de gegeven datum of null wanneer die
-   *         voorstelling er niet is.
+   * @param voorstelling De datum van de voorstelling.
+   * @param rij De rij van de stoel.
+   * @param stoel Het stoelnummer.
+   * @param klant De klant voor wie de reservering wordt gedaan.
+   *
+   * @throws TheaterException als een fout optreedt tijdens het ophalen of wegschrijven van de bezettinggegevens
+   */
+  public static void slaBezettingOp(GregorianCalendar voorstelling, int rij, int stoel, Klant klant) throws TheaterException{
+
+    java.sql.Date sqlDatum = new java.sql.Date(voorstelling.getTimeInMillis());
+    boolean recordDatabaseBestaat = false;
+
+    try {
+      pGetBezettingStoel.setDate(1, sqlDatum);
+      pGetBezettingStoel.setInt(2, rij);
+      pGetBezettingStoel.setInt(3, stoel);
+      ResultSet res = pGetBezettingStoel.executeQuery();
+      recordDatabaseBestaat = res.next();
+    } catch (SQLException e){
+      throw new TheaterException ("Fout bij het ophalen van bezetting gegevens .");
+    }
+
+    if(recordDatabaseBestaat == false) {
+      try {
+        pInsertBezetting.setInt(1, getVolgendBezettingnummer());
+        pInsertBezetting.setDate(2, sqlDatum);
+        pInsertBezetting.setInt(3, rij);
+        pInsertBezetting.setInt(4, stoel);
+        pInsertBezetting.setInt(5, klant.getKlantnummer());
+        pInsertBezetting.executeUpdate();
+
+      } catch (SQLException e) {
+        throw new TheaterException("Fout bij het opslaan van nieuwe bezetting.");
+      }
+    }
+  }
+
+  /**
+   * Zoekt in de database naar een voorstelling op een gegeven datum en vult deze met de opgeslagen bezetting.
+   *
+   * @param datum De datum waarop de voorstelling plaats vind.
+   *
+   * @return een voorstelling op de gegeven datum of null wanneer die voorstelling er niet is.
    */
   public static Voorstelling geefVoorstelling(GregorianCalendar datum) throws TheaterException{
 
     Voorstelling voorstelling = null;
     ResultSet res = null;
+    java.sql.Date sqlDatumVoorstelling = new java.sql.Date(datum.getTimeInMillis());
 
-    java.sql.Date sqlDatumZoek = new java.sql.Date(datum.getTimeInMillis());
+    // zoeken van de voorstelling naam
     try {
-      pVoorDatum.setDate(1, sqlDatumZoek);
-      res = pVoorDatum.executeQuery();
+      pGetVoorstellingDatum.setDate(1, sqlDatumVoorstelling);
+      res = pGetVoorstellingDatum.executeQuery();
 
-      while(res.next()) {
-        java.sql.Date sqlDatum = res.getDate("datum");
-        GregorianCalendar datumGevonden = new GregorianCalendar();
-        datumGevonden.setTimeInMillis(sqlDatum.getTime());
+      if(res.next()) {
+        String naamVoorstelling = res.getString("naam");
+        voorstelling = new Voorstelling(naamVoorstelling, datum);
 
-        String naam = res.getString("naam");
+        // zoeken van de opgeslagen bezettingen
+        pGetBezetting.setDate(1, sqlDatumVoorstelling);
+        res = pGetBezetting.executeQuery();
 
-        voorstelling = new Voorstelling(naam, datumGevonden);
-      }
+        while(res.next()) {
+          // reserveer de opgeslagen bezettingen
+          int rijnummer = res.getInt("rijnummer");
+          int stoelnummer = res.getInt("stoelnummer");
+          voorstelling.reserveer(rijnummer,stoelnummer);
 
+          // zoek klantgegevens op en plaats deze op alle gereseerveerde stoelen
+          int klantnummer = res.getInt("klant");
+          pGetKlant.setInt(1, klantnummer);
+          ResultSet genestRes = pGetKlant.executeQuery();
 
-      pBezetGet.setDate(1, sqlDatumZoek);
-      res = pBezetGet.executeQuery();
-
-      while(res.next()) {
-        // reserveer opgeslagen plaatsen
-        int rijnummer = res.getInt("rijnummer");
-        int stoelnummer = res.getInt("stoelnummer");
-        voorstelling.reserveer(rijnummer,stoelnummer);
-
-        // haal klantgegevens op, maak nieuwe klant instantie en plaats op gereseerveerde stoelen
-        int klantnummer = res.getInt("klant");
-        pKlantGet.setInt(1, klantnummer);
-        ResultSet genestRes = pKlantGet.executeQuery();
-
-        while(genestRes.next()) {
-          String naam = genestRes.getString("naam");
-          String telefoon = genestRes.getString("telefoon");
-          Klant klant = new Klant(klantnummer, naam, telefoon);
-          voorstelling.plaatsKlant(rijnummer, stoelnummer,klant);
+          if(genestRes.next()) {
+            String naam = genestRes.getString("naam");
+            String telefoon = genestRes.getString("telefoon");
+            Klant klant = new Klant(klantnummer, naam, telefoon);
+            voorstelling.plaatsKlant(klant);
+          } else {
+            throw new TheaterException ("Geen klantgegevens gevonden die bij klant nummer passen");
+          }
         }
-
       }
-
     } catch (SQLException e){
-      throw new TheaterException("Fout bij het uitvoeren van de voorstelling zoek query. (Message: " + e.getMessage());
+      throw new TheaterException("Fout bij het ophalen van de gegevens van een voorstelling. (Message: " + e.getMessage());
     }
       return voorstelling;
 
+  }
+
+  /**
+   * Genereert het volgende beschikbare bezettingnummer.
+   *
+   * @return Het hoogste klantnummer plus een.
+   *
+   * @throws TheaterException als er iets misgaat bij het ophalen van het hoogste reserveringsnummer.
+   */
+  private static int getVolgendBezettingnummer() throws TheaterException{
+
+    int hoogsteBezettingnummer = 0;
+
+    try {
+      ResultSet res = pGetMaxResnummer.executeQuery();
+      if (res.next()){
+        hoogsteBezettingnummer = res.getInt(1);
+      }
+
+    } catch (SQLException e){
+      throw new TheaterException("Fout bij het ophalen van het hoogste reserveringsnummer");
+    }
+
+    hoogsteBezettingnummer++;
+
+    return hoogsteBezettingnummer;
+  }
+
+
+  public static void main(String[] args) {
+    String sdatum = "12-09-2018";
+    SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
+    GregorianCalendar datum = new GregorianCalendar();
+    try {
+      datum.setTime(fmt.parse(sdatum));
+
+    } catch (ParseException exception){
+
+    }
+    try {
+      Connectiebeheer.openDB();
+      ArrayList<GregorianCalendar> data = geefVoorstellingsData();
+      System.out.println(data.toString());
+
+      Voorstelling voorstelling = geefVoorstelling(datum);
+      System.out.println(voorstelling.toString());
+      Connectiebeheer.closeDB();
+    } catch (TheaterException e){
+      e.getMessage();
+    }
   }
 
 
