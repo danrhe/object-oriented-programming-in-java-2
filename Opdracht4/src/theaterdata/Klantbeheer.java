@@ -19,7 +19,8 @@ public class Klantbeheer {
   /**
    * Initialiseert de klanten.
    */
-  public static void init(Connection con) throws TheaterException{
+  public static void init() throws TheaterException{
+    Connection con = Connectiebeheer.getConnection();
     String sql;
     try {
 
@@ -61,14 +62,24 @@ public class Klantbeheer {
   }
   
   /**
-   * Geeft een klant met de gegeven naam en het gegeven telefoonnummer
+   * Geeft een klant met de gegeven naam en het gegeven telefoonnummer.
+   *
    * Als de klant al in de lijst zat, wordt die teruggegeven; anders
    * wordt er een nieuwe klant gemaakt.
+   *
    * @param naam  naam van de klant
+   *
    * @param telefoon  telefoonnummer van de klant
+   *
    * @return  een klant me de ingevoerde naam en telefoon.
+   *
+   * @throws TheaterException als telefoon of naam leeg is.
    */
   public static Klant geefKlant(String naam, String telefoon) throws TheaterException{
+
+    if (naam.length() == 0){throw new TheaterException("Naam van de klant mag niet leeg zijn");}
+    if (telefoon.length() == 0){throw new TheaterException("Telefoonnummer van de klant mag niet leeg zijn");}
+
     Klant klant = zoekKlant(naam, telefoon);
     if (klant == null) {
       klant = nieuweKlant(naam, telefoon);

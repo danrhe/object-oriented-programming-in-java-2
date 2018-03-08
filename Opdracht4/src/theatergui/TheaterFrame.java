@@ -81,9 +81,12 @@ public class TheaterFrame extends JFrame {
    * Vult de voorstellingsKeuze en selecteert de eerste voorstelling.
    */
   private void mijnInit() {
-    try {
-      theater = new Theater("Theater de Schouwburg");
-      setTitle(theater.getNaam());
+
+    theater = new Theater("Theater de Schouwburg");
+    setTitle(theater.getNaam());
+
+    try{
+      theater.initieerDataBeheer();
       ArrayList<GregorianCalendar> data = theater.geefVoorstellingsData();
 
       for (GregorianCalendar datum : data) {
@@ -92,9 +95,8 @@ public class TheaterFrame extends JFrame {
 
       voorstellingsKeuze.setSelectedIndex(0);
 
-    } catch (TheaterException e){
-
-      foutLabel.setText(e.getMessage());
+    } catch (TheaterException exception){
+      foutLabel.setText(exception.getMessage());
     }
 
     // add database close when frame is closed
@@ -104,11 +106,17 @@ public class TheaterFrame extends JFrame {
       public void windowClosing(WindowEvent e)
       {
         try {
-          theater.sluitAf();
+          theater.sluitVerbindingDatabase();
+
         } catch (TheaterException theEx){
           System.out.println(theEx.getMessage());
+
+        } catch (NullPointerException nullEx){
+          System.out.println(nullEx.getMessage());
+
+        } finally {
+          e.getWindow().dispose();
         }
-        e.getWindow().dispose();
       }
     });
   }
@@ -140,9 +148,11 @@ public class TheaterFrame extends JFrame {
       // Maak een nieuwe interface voor deze voorstelling
       Voorstelling voorstelling = theater.getHuidigeVoorstelling();
       voorstellingsLabel.setText(voorstelling.getNaam());
+
       if (voorstellingsPanel != null) {
         getContentPane().remove(voorstellingsPanel);
       }
+
       voorstellingsPanel = new VoorstellingsPanel(theater);
       voorstellingsPanel.setLocation(80, 100);
       getContentPane().add(voorstellingsPanel);
@@ -158,14 +168,17 @@ public class TheaterFrame extends JFrame {
   private void plaatsKnopAction() {
     String naam = naamVeld.getText();
     String telefoon = telefoonVeld.getText();
+    foutLabel.setText("");
+
     try {
       theater.plaatsKlant(naam, telefoon);
+      naamVeld.setText("");
+      telefoonVeld.setText("");
+
     } catch (TheaterException ex){
       foutLabel.setText(ex.getMessage());
     }
-    // maak de velden leeg
-    naamVeld.setText("");
-    telefoonVeld.setText("");
+
   }
 
   /**

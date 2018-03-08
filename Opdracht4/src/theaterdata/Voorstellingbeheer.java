@@ -24,13 +24,15 @@ public class Voorstellingbeheer {
   private static PreparedStatement pGetKlant = null;
   private static PreparedStatement pGetBezettingStoel = null;
   private static PreparedStatement pInsertBezetting = null;
-  private static PreparedStatement pGetMaxResnummer = null;
 
   /**
    * Vult voorstellingbeheer met een aantal voorstellingen.
    */
-  public static void init(Connection con) throws TheaterException{
+  public static void init() throws TheaterException{
+
+    Connection con = Connectiebeheer.getConnection();
     String sql = null;
+
     try {
       sql = "SELECT datum, naam FROM voorstelling WHERE datum >NOW()";
       pGetVoorstellingen = con.prepareStatement(sql);
@@ -40,12 +42,11 @@ public class Voorstellingbeheer {
       pGetBezetting = con.prepareStatement(sql);
       sql = "SELECT naam, telefoon FROM klant WHERE klantnummer = ?";
       pGetKlant = con.prepareStatement(sql);
-      sql = "SELECT MAX(resnummer) FROM bezetting";
-      pGetMaxResnummer = con.prepareStatement(sql);
-      sql = "INSERT INTO bezetting (resnummer, voorstelling, rijnummer, stoelnummer, klant) VALUES (?, ?, ?, ?, ?)";
+      sql = "INSERT INTO bezetting (voorstelling, rijnummer, stoelnummer, klant) VALUES (?, ?, ?, ?)";
       pInsertBezetting = con.prepareStatement(sql);
       sql = "SELECT resnummer FROM bezetting WHERE voorstelling = ? AND rijnummer = ? AND stoelnummer = ?";
       pGetBezettingStoel = con.prepareStatement(sql);
+
     } catch (SQLException e){
 
       throw new TheaterException("Fout bij het voorbereiden van voorstellingen queries");
@@ -73,8 +74,10 @@ public class Voorstellingbeheer {
       }
 
     } catch (SQLException e){
-
       throw new TheaterException("Fout bij het voorbereiden van voorstellingen queries");
+
+    } catch (NullPointerException e){
+      throw new TheaterException("Geen toekomstige voorstellingen gevonden");
     }
 
     return data;
@@ -102,17 +105,17 @@ public class Voorstellingbeheer {
       pGetBezettingStoel.setInt(3, stoel);
       ResultSet res = pGetBezettingStoel.executeQuery();
       recordDatabaseBestaat = res.next();
+
     } catch (SQLException e){
       throw new TheaterException ("Fout bij het ophalen van bezetting gegevens .");
     }
 
     if(recordDatabaseBestaat == false) {
       try {
-        pInsertBezetting.setInt(1, getVolgendBezettingnummer());
-        pInsertBezetting.setDate(2, sqlDatum);
-        pInsertBezetting.setInt(3, rij);
-        pInsertBezetting.setInt(4, stoel);
-        pInsertBezetting.setInt(5, klant.getKlantnummer());
+        pInsertBezetting.setDate(1, sqlDatum);
+        pInsertBezetting.setInt(2, rij);
+        pInsertBezetting.setInt(3, stoel);
+        pInsertBezetting.setInt(4, klant.getKlantnummer());
         pInsertBezetting.executeUpdate();
 
       } catch (SQLException e) {
@@ -164,7 +167,7 @@ public class Voorstellingbeheer {
             Klant klant = new Klant(klantnummer, naam, telefoon);
             voorstelling.plaatsKlant(klant);
           } else {
-            throw new TheaterException ("Geen klantgegevens gevonden die bij klant nummer passen");
+              throw new TheaterException ("Geen klantgegevens gevonden die bij klant nummer passen");
           }
         }
       }
@@ -173,32 +176,6 @@ public class Voorstellingbeheer {
     }
       return voorstelling;
 
-  }
-
-  /**
-   * Genereert het volgende beschikbare bezettingnummer.
-   *
-   * @return Het hoogste klantnummer plus een.
-   *
-   * @throws TheaterException als er iets misgaat bij het ophalen van het hoogste reserveringsnummer.
-   */
-  private static int getVolgendBezettingnummer() throws TheaterException{
-
-    int hoogsteBezettingnummer = 0;
-
-    try {
-      ResultSet res = pGetMaxResnummer.executeQuery();
-      if (res.next()){
-        hoogsteBezettingnummer = res.getInt(1);
-      }
-
-    } catch (SQLException e){
-      throw new TheaterException("Fout bij het ophalen van het hoogste reserveringsnummer");
-    }
-
-    hoogsteBezettingnummer++;
-
-    return hoogsteBezettingnummer;
   }
 
 
@@ -220,6 +197,7 @@ public class Voorstellingbeheer {
       Voorstelling voorstelling = geefVoorstelling(datum);
       System.out.println(voorstelling.toString());
       Connectiebeheer.closeDB();
+
     } catch (TheaterException e){
       e.getMessage();
     }

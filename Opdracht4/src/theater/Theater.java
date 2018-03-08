@@ -19,9 +19,8 @@ public class Theater {
    * Creeert een theater.
    * @param naam theaternaam
    */
-  public Theater(String naam) throws TheaterException{
+  public Theater(String naam){
     this.naam = naam;
-    Connectiebeheer.openDB();
 
   }
 
@@ -29,9 +28,18 @@ public class Theater {
    * Beeindigt de verbinding met de database.
    *
    */
-  public void sluitAf() throws TheaterException{
-    Connectiebeheer.closeDB();
+  public void initieerDataBeheer() throws TheaterException{
+    Connectiebeheer.openDB();
+    Voorstellingbeheer.init();
+    Klantbeheer.init();
+  }
 
+  /**
+   * Beeindigt de verbinding met de database.
+   *
+   */
+  public void sluitVerbindingDatabase() throws TheaterException{
+    Connectiebeheer.closeDB();
   }
 
   /**

@@ -124,13 +124,19 @@ public class Voorstelling {
   public void plaatsKlant(Klant klant) throws TheaterException{
 
     GregorianCalendar datumVoorstelling = getDatum();
+    boolean isVeranderd = false;
+
     for (int rij = 1; rij < plaatsen.length; rij++) {
       for (int stoel = 1; stoel < plaatsen[rij].length; stoel++) {
         boolean isGeplaatst = plaatsen[rij][stoel].plaatsKlant(klant);
         if (isGeplaatst){
           Voorstellingbeheer.slaBezettingOp(datumVoorstelling, rij, stoel, klant);
+          isVeranderd = true;
         }
       }
+    }
+    if (isVeranderd == false){
+      throw new TheaterException("Er is geen plaats geselecteerd.");
     }
   }
 

@@ -1,5 +1,10 @@
 package theater;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 /**
  * Representeert klant.
  * @author Open Universiteit
@@ -17,6 +22,7 @@ public class Klant {
    */
   public Klant(int klantnummer, String naam, String telefoon) {
     this.klantnummer = klantnummer;
+    
     this.naam = naam;
     this.telefoon = telefoon;
   }
@@ -26,6 +32,7 @@ public class Klant {
    * @return klantnummer
    */
   public int getKlantnummer() {
+
     return klantnummer;
   }
 
