@@ -49,7 +49,7 @@ public class Voorstellingbeheer {
 
     } catch (SQLException e){
 
-      throw new TheaterException("Fout bij het voorbereiden van voorstellingen queries");
+      throw new TheaterException("Een of meer database queries van de Voorstellingbeheer klasse bevat een fout.");
     }
 
   }
@@ -74,7 +74,7 @@ public class Voorstellingbeheer {
       }
 
     } catch (SQLException e){
-      throw new TheaterException("Fout bij het voorbereiden van voorstellingen queries");
+      throw new TheaterException("Database fout bij het ophalen van voorstellings data");
 
     } catch (NullPointerException e){
       throw new TheaterException("Geen toekomstige voorstellingen gevonden");

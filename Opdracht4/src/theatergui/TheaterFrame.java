@@ -97,6 +97,8 @@ public class TheaterFrame extends JFrame {
 
     } catch (TheaterException exception){
       foutLabel.setText(exception.getMessage());
+    } catch (IllegalArgumentException exception){
+      foutLabel.setText("Lijst met toekomstige voorstelling data is leeg");
     }
 
     // add database close when frame is closed

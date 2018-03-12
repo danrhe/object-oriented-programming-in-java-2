@@ -41,9 +41,9 @@ public class Connectiebeheer {
         con = DriverManager.getConnection(DBConst.URL, DBConst.GEBRUIKERSNAAM, DBConst.WACHTWOORD);
 
       } catch (ClassNotFoundException e) {
-        throw new TheaterException("Driver met opgegeven naam bestaat niet (" + DBConst.DRIVERNAAM + ")");
+        throw new TheaterException("Fout bij het maken van een verbinding met database. Driver met opgegeven naam bestaat niet (" + DBConst.DRIVERNAAM + ")");
       } catch (SQLException e) {
-        throw new TheaterException("Fout by het maken van een verbinding met de database. Fout: " + e.getMessage());
+        throw new TheaterException("Fout by het maken van een verbinding met de database. (Fout: " + e.getMessage() + ")");
       }
     }
   }

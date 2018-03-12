@@ -136,7 +136,7 @@ public class Voorstelling {
       }
     }
     if (isVeranderd == false){
-      throw new TheaterException("Er is geen plaats geselecteerd.");
+      throw new TheaterException("Voor plaatsing van een klant moet tenminste een plaats worden geselecteerd.");
     }
   }
 

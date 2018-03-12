@@ -35,7 +35,7 @@ public class Klantbeheer {
 
 
     } catch (SQLException e){
-      throw new TheaterException("Fout bij het voorbereiden van de klantbeheer query");
+      throw new TheaterException("Een of meer database queries van de Klantenbeheer klasse bevat een fout.");
     }
    }
   
@@ -77,8 +77,12 @@ public class Klantbeheer {
    */
   public static Klant geefKlant(String naam, String telefoon) throws TheaterException{
 
-    if (naam.length() == 0){throw new TheaterException("Naam van de klant mag niet leeg zijn");}
-    if (telefoon.length() == 0){throw new TheaterException("Telefoonnummer van de klant mag niet leeg zijn");}
+    if (naam.length() == 0){
+      throw new TheaterException("Naam van de klant mag niet leeg zijn");
+    }
+    if (telefoon.length() == 0){
+      throw new TheaterException("Telefoonnummer van de klant mag niet leeg zijn");
+    }
 
     Klant klant = zoekKlant(naam, telefoon);
     if (klant == null) {
@@ -110,7 +114,7 @@ public class Klantbeheer {
       return null;
 
       } catch (SQLException ex) {
-      throw new TheaterException("Fout bij het uitvoeren van de zoek klant query");
+      throw new TheaterException("Database fout bij het zoeken van een klant.");
     }
 
   }
@@ -131,7 +135,7 @@ public class Klantbeheer {
       pInsertKlant.executeUpdate();
     }
     catch (SQLException e){
-      throw new TheaterException("Fout bij het aanmaken nieuwe klant");
+      throw new TheaterException("Database fout bij het aanmaken nieuwe klant");
     }
 
     return klant;
